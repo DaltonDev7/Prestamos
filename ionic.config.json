@@ -1,5 +1,7 @@
 {
   "name": "prestamos",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
