@@ -19,6 +19,10 @@ const routes: Routes = [
     path: 'registrar-prestamo',
     loadChildren: () => import('./pages/registrar-prestamo/registrar-prestamo.module').then( m => m.RegistrarPrestamoPageModule)
   },
+  {
+    path: 'registrolist',
+    loadChildren: () => import('./pages/registrolist/registrolist.module').then( m => m.RegistrolistPageModule)
+  },
 ];
 
 @NgModule({

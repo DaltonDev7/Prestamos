@@ -8,7 +8,7 @@ import { RegistrarPrestamoPageRoutingModule } from './registrar-prestamo-routing
 
 import { RegistrarPrestamoPage } from './registrar-prestamo.page';
 import { SharedModule } from 'src/app/shared/shared.module';
-
+import { NgxMaskModule, IConfig } from 'ngx-mask'
 @NgModule({
   imports: [
     CommonModule,
@@ -16,7 +16,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
     IonicModule,
     RegistrarPrestamoPageRoutingModule,
     SharedModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxMaskModule.forRoot()
   ],
   declarations: [RegistrarPrestamoPage]
 })

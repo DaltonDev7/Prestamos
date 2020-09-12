@@ -13,20 +13,34 @@ export class FormsBuilderService {
 
     getClienteBuilder(){
         return this.fb.group({
-            'Cedula':[null,[Validators.required]],
+            'Cedula':[null,[Validators.required,Validators.minLength(12)]],
             'Nombres':[null,[Validators.required]],
             'Apellidos':[null,[Validators.required]],
             'FechaNacimiento':[null,[Validators.required]],
             'Foto':[null],
-            'Sexo':[null],
+            'Sexo':[null,[Validators.required]],
             'Direccion':[null,[Validators.required]],
-            'Celular':[null,[Validators.required]],
-            'Ocupacion':[null],
+            'Celular':[null,[Validators.required,Validators.minLength(12)]],
+            'Ocupacion':[null,[Validators.required]],
             'Estado':[null,[Validators.required]],
             'Banco':[null],
             'TarjetaNo':[null],
             'Clave':[null],
-            'Cuenta':[null,[Validators.required]],
+            'Cuenta':[null],
+        })
+    }
+//Solo foto, Banco, tarjeta, clave y cuenta pueden ser null
+    getPrestamoForm(){
+        return this.fb.group({
+            'CedulaCliente':[null,[Validators.required]],
+            'IdCliente':[null],
+            'Tipo':[null,[Validators.required]],
+            'Fecha':[null,[Validators.required]],
+            'Monto':[null,[Validators.required]],
+            'CantidadCuotas':[null,[Validators.required]],
+            'ValorCuotas':[null,[Validators.required]],
+            'TotalPago':[null,[Validators.required]],
+            'InteresGenerar':[null]
         })
     }
 

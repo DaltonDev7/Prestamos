@@ -2,5 +2,71 @@
 
 
 <ion-content>
+    <div class="container m-top">
+        <h5>Registar Prestamo</h5>
+
+        <form [formGroup]="prestamoForm">
+
+            <div class="row">
+
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="">Tipo Prestamo</label>
+                        <input type="text" class="form-control" formControlName="Tipo" upperCase>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="">Fecha</label>
+                        <input type="text" class="form-control" formControlName="Fecha" upperCase>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="">Monto Prestamo</label>
+                        <input type="number" class="form-control" formControlName="Monto" upperCase >
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="">Cantidad Cuotas</label>
+                        <input type="number" class="form-control" formControlName="CantidadCuotas" upperCase>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="">Valor Cuotas</label>
+                        <input type="number" class="form-control" formControlName="ValorCuotas" upperCase >
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="">Total Pago</label>
+                        <input type="number" class="form-control" formControlName="TotalPago" upperCase >
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="">Interes</label>
+                        <input type="number" class="form-control" formControlName="InteresGenerar" upperCase >
+                    </div>
+                </div>
+
+            </div>
+
+        </form>
+    </div>
+
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button color="success" (click)="savePrestamo()">
+            <ion-icon name="save-sharp"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
 
 </ion-content>

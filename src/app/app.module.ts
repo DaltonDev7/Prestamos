@@ -13,11 +13,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { SQLite } from '@ionic-native/sqlite/ngx';
 import { SQLitePorter } from '@ionic-native/sqlite-porter/ngx';
+import { CedulaPipe } from './core/pipes/cedula.pipe';
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    MenuComponent
+    MenuComponent,
+    CedulaPipe
   ],
   entryComponents: [],
   imports: [
@@ -26,6 +29,7 @@ import { SQLitePorter } from '@ionic-native/sqlite-porter/ngx';
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule
+
   ],
   providers: [
     StatusBar,

@@ -16,5 +16,11 @@ export const MenuOpciones:MenuOpcion[]= [
         'icon':'cash-sharp',
         'label':'Nuevo Prestamo',
         'route':'registrar-prestamo'
+     },
+     {
+        'icon':'eye-sharp',
+        'label':'Ver Registros',
+        'route':'registrolist'
      }
 ]
+

@@ -4,99 +4,108 @@
     <div class="container m-top">
         <h5>Registar Cliente</h5>
 
-        <form [formGroup]="clienteForm"> 
+        <form [formGroup]="clienteForm">
 
             <div class="row">
 
-                <div class="col-12">
+                <div class="col-sm-12 col-md-6 col-lg-4">
                     <div class="form-group">
                         <label for="">Cedula</label>
-                        <input 
-                         type="text" 
-                         class="form-control"  
-                         formControlName="Cedula"
-                         upperCase>
+                        <input id="cedula-id" appIdentificacion class="form-control" formControlName="Cedula">
                     </div>
                 </div>
 
-                <div class="col-12">
+                <div class="col-sm-12 col-md-6 col-lg-4">
                     <div class="form-group">
                         <label for="">Nombres</label>
                         <input type="text" class="form-control" formControlName="Nombres" upperCase>
                     </div>
                 </div>
 
-                <div class="col-12">
+                <div class="col-sm-12 col-md-6 col-lg-4">
                     <div class="form-group">
                         <label for="">Apellidos</label>
-                        <input type="text" class="form-control"  formControlName="Apellidos" upperCase>
+                        <input type="text" class="form-control" formControlName="Apellidos" upperCase>
                     </div>
                 </div>
 
-                <div class="col-12">
+                <div class="col-sm-12 col-md-6 col-lg-4">
                     <div class="form-group">
                         <label for="">FechaNacimiento</label>
                         <input type="text" class="form-control" formControlName="FechaNacimiento" upperCase>
                     </div>
                 </div>
-                <div class="col-12">
+                <div class="col-sm-12 col-md-6 col-lg-4">
                     <div class="form-group">
                         <label for="">Foto</label>
                         <input type="text" class="form-control" formControlName="Foto" upperCase>
                     </div>
                 </div>
-                <div class="col-12">
+                <div class="col-sm-12 col-md-6 col-lg-4">
                     <div class="form-group">
                         <label for="">Sexo</label>
-                        <input type="text" class="form-control" formControlName="Sexo" upperCase>
+                        <ng-select bindLabel="text" bindValue="id" placeholder="Seleccione" upperCase [items]="sexoCombox"
+                            formControlName="Sexo">
+                        </ng-select>
                     </div>
                 </div>
-                <div class="col-12">
+                <div class="col-sm-12 col-md-6 col-lg-4">
                     <div class="form-group">
                         <label for="">Direccion</label>
-                        <input type="text" class="form-control"  formControlName="Direccion" upperCase>
+                        <input type="text" class="form-control" formControlName="Direccion" upperCase>
                     </div>
                 </div>
-                <div class="col-12">
+
+                <div class="col-sm-12 col-md-6 col-lg-4">
                     <div class="form-group">
                         <label for="">Celular</label>
-                        <input type="text" class="form-control" formControlName="Celular" upperCase>
+                        <input appPhoneMask class="form-control" formControlName="Celular">
                     </div>
                 </div>
-                <div class="col-12">
+                <div class="col-sm-12 col-md-6 col-lg-4">
                     <div class="form-group">
                         <label for="">Ocupacion</label>
                         <input type="text" class="form-control" formControlName="Ocupacion" upperCase>
                     </div>
                 </div>
-                <div class="col-12">
+                <div class="col-sm-12 col-md-6 col-lg-4">
                     <div class="form-group">
                         <label for="">Estado</label>
-                        <input type="text" class="form-control" formControlName="Estado" upperCase>
+                        <ng-select 
+                        bindLabel="text" 
+                        bindValue="id" 
+                        upperCase
+                        placeholder="Seleccione" 
+                        [items]="estadoCombox"
+                        formControlName="Estado">
+                        </ng-select>
                     </div>
                 </div>
-                <div class="col-12">
+                <div class="col-sm-12 col-md-6 col-lg-4">
                     <div class="form-group">
                         <label for="">Banco</label>
-                        <input type="text" class="form-control" formControlName="Banco" upperCase>
+                        <ng-select bindLabel="text" bindValue="id" upperCase placeholder="Seleccione" [items]="bancoCombox"
+                            formControlName="Banco">
+                        </ng-select>
                     </div>
                 </div>
-                <div class="col-12">
+                <div class="col-sm-12 col-md-6 col-lg-4">
                     <div class="form-group">
                         <label for="">TarjetaNo</label>
-                        <input type="text" class="form-control" formControlName="TarjetaNo" upperCase>
+                        <input type="text" class="form-control" mask="0000-0000-0000-0000" formControlName="TarjetaNo"
+                            upperCase>
                     </div>
                 </div>
-                <div class="col-12">
+                <div class="col-sm-12 col-md-6 col-lg-4">
                     <div class="form-group">
                         <label for="">Clave</label>
-                        <input type="text" class="form-control" formControlName="Clave" upperCase>
+                        <input type="text" class="form-control zz" formControlName="Clave" upperCase>
                     </div>
                 </div>
-                <div class="col-12">
+                <div class="col-sm-12 col-md-6 col-lg-4">
                     <div class="form-group">
                         <label for="">Cuenta</label>
-                        <input type="text" class="form-control"  formControlName="Cuenta" upperCase>
+                        <input type="text" class="form-control" formControlName="Cuenta" upperCase>
                     </div>
                 </div>
             </div>
@@ -104,34 +113,19 @@
         </form>
     </div>
 
-   
+
+
+
     <div *ngIf="permiso1">
         <h4>la base de datos esta conectada</h4>
     </div>
-    <div *ngIf="permiso1 == false">
-        <h4>la base de datos no esta conectada</h4>
-    </div>
 
-    <div *ngFor="let item of listCliente">
-        <p>{{item.Cedula}}</p>
-        <p>{{item.Nombres}}</p>
-        <p>{{item.Apellidos}}</p>
-        <p>{{item.Celular}}</p>
-        <p>{{item.Ocupacion}}</p>
-    </div>
-
-
-
-      <ion-fab vertical="bottom" horizontal="end">
-        <ion-fab-button color="btnGuardar" (click)="saveCliente()">
-          <ion-icon name="save-sharp"></ion-icon>
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button color="success" (click)="saveCliente()">
+            <ion-icon name="save-sharp"></ion-icon>
         </ion-fab-button>
+    </ion-fab>
 
-        <ion-fab-list side="top">
-          <ion-fab-button><ion-icon name="save-sharp"></ion-icon></ion-fab-button>
-        </ion-fab-list>
-      </ion-fab>
 
-   
 
 </ion-content>
