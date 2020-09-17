@@ -1,6 +1,5 @@
-<app-header> </app-header>
 
-<ion-content>
+<ion-content color="fondo">
     <div class="container m-top">
         <h5>Registar Cliente</h5>
 
@@ -11,7 +10,7 @@
                 <div class="col-sm-12 col-md-6 col-lg-4">
                     <div class="form-group">
                         <label for="">Cedula</label>
-                        <input id="cedula-id" appIdentificacion class="form-control" formControlName="Cedula">
+                        <input id="cedula-id" mask="000-0000000-0" class="form-control" formControlName="Cedula">
                     </div>
                 </div>
 
@@ -59,7 +58,7 @@
                 <div class="col-sm-12 col-md-6 col-lg-4">
                     <div class="form-group">
                         <label for="">Celular</label>
-                        <input appPhoneMask class="form-control" formControlName="Celular">
+                        <input mask="000-000-0000" class="form-control" formControlName="Celular">
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-6 col-lg-4">
@@ -113,7 +112,7 @@
         </form>
     </div>
 
-
+   
 
 
     <div *ngIf="permiso1">

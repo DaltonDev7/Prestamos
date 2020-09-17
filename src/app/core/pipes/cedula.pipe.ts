@@ -1,12 +1,26 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'cedula'
+  name: 'filtro'
 })
-export class CedulaPipe implements PipeTransform {
+export class FiltroPipe implements PipeTransform {
 
-  transform(value: unknown, ...args: unknown[]): unknown {
-    return null;
+  transform( arreglo: any[],
+             texto: string,
+             columna: string ): any[] {
+
+    if ( texto === '' ) {
+      return arreglo;
+    }
+
+    texto = texto.toUpperCase();
+
+
+    return arreglo.filter( item => {
+      return item[columna].toUpperCase()
+              .includes( texto );
+    });
+
   }
 
 }

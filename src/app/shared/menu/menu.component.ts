@@ -18,7 +18,6 @@ export class MenuComponent implements OnInit {
 
   ngOnInit() {
     this.MenuLabel = MenuOpciones;
-    console.log(this.MenuLabel)
    }
 
 

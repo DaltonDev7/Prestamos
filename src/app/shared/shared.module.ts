@@ -1,27 +1,25 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HeaderComponent } from './header/header.component';
-
 import { NgxUpperCaseDirectiveModule } from 'ngx-upper-case-directive';
 import { NgSelectModule } from '@ng-select/ng-select';
-
+import { BrowserModule } from '@angular/platform-browser';
+import { NgxMaskModule, IConfig } from 'ngx-mask'
 
 @NgModule({
   declarations: [
-    HeaderComponent
+   
   ],
   imports: [
     CommonModule,
-
     NgxUpperCaseDirectiveModule,
-
+    NgxMaskModule.forRoot()
 
   ],
   exports:[
-    HeaderComponent,
-
+    
     NgxUpperCaseDirectiveModule,
     NgSelectModule,
+    NgxMaskModule
  
   ]
 })

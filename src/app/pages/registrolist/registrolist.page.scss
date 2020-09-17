@@ -1,4 +1,53 @@
 
 .card-register{
-    
+     width: 100%;
+     -webkit-box-shadow: 1px 0px 24px -10px rgba(0,0,0,0.29);
+     -moz-box-shadow: 1px 0px 24px -10px rgba(0,0,0,0.29);
+     box-shadow: 1px 0px 24px -10px rgba(0,0,0,0.29);
+     border-radius: 22px;
+     cursor: pointer;
+     margin-bottom: 18px;
+}
+.list-header{
+    display: flex;
+    justify-content: center;
+}
+
+.descripcion-persona{
+    padding-top: 8px;
+    padding-bottom: 10px;
+    padding-left: 4px;
+    padding-right: 4px;
+    color: #fff;
+    background-color: #3185FC;
+   // border : 0.5px solid rgba(22, 22, 22, 0.582);
+}
+
+.descripcion-prestamo{
+    padding-top: 8px;
+    padding-bottom: 10px;
+    padding-left: 4px;
+    padding-right: 4px;
+    color: #fff;
+    background-color: #EB5E28;
+}
+
+
+
+.descripcion-persona p,
+.descripcion-prestamo p{
+    font-family: 'Ubuntu';
+    font-size: 20px;
+    text-align: center;
+    margin: 0px;
+}
+
+.user-icon{
+    font-size: 128px;
+    color: #3185FC;
+}
+
+.prestamo-icon{
+    font-size: 128px;
+    color: #EB5E28;
 }

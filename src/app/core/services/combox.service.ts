@@ -72,5 +72,10 @@ export class ComboxService {
     { id: "INACTIVO", text: "INACTIVO"}
   ]
 
+  tipoPrestamo: Combox[] = [
+    { id: "DEFINIDO", text: "DEFINIDO" },
+    { id: "INDEFINIDO", text: "INDEFINIDO"}
+  ]
+
 
 }

@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
 import { RouteReuseStrategy } from '@angular/router';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
@@ -13,22 +13,31 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { SQLite } from '@ionic-native/sqlite/ngx';
 import { SQLitePorter } from '@ionic-native/sqlite-porter/ngx';
-import { CedulaPipe } from './core/pipes/cedula.pipe';
+
+
+import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { fas } from '@fortawesome/free-solid-svg-icons'
+import { far } from '@fortawesome/free-regular-svg-icons'
+import { fab } from '@fortawesome/free-brands-svg-icons'
+import { HeaderComponent } from './shared/header/header.component';
+import { CommonModule } from '@angular/common';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     MenuComponent,
-    CedulaPipe
+    HeaderComponent,
   ],
   entryComponents: [],
   imports: [
     BrowserModule, 
+    CommonModule,
     IonicModule.forRoot(), 
     AppRoutingModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    FontAwesomeModule
 
   ],
   providers: [
@@ -40,4 +49,8 @@ import { CedulaPipe } from './core/pipes/cedula.pipe';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule {
+  constructor(library: FaIconLibrary) { 
+		library.addIconPacks(fas, fab, far);
+	}
+}

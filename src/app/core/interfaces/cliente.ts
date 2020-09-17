@@ -15,4 +15,5 @@ export interface Cliente {
     TarjetaNo?: number;
     Clave?: number;
     Cuenta?: string;
+    FechaCreacion?: Date,
 }

@@ -12,8 +12,8 @@ import { Cliente } from '../interfaces/cliente';
 export class BasedatosService {
 
   //ATRIBUTOS
-  private database: SQLiteObject;
-  private dbReady = new BehaviorSubject<boolean>(false);
+  public database: SQLiteObject;
+  public dbReady = new BehaviorSubject<boolean>(false);
   clienteList = new BehaviorSubject([]);
 
   constructor(
@@ -47,6 +47,7 @@ export class BasedatosService {
           console.log("querys insertado.")
           this.dbReady.next(true);
           console.log("ya esta true")
+          this.loadCliente();
         }).catch(e => console.error(JSON.stringify(e)))
       })  
     }
@@ -76,6 +77,7 @@ export class BasedatosService {
               TarjetaNo: res.rows.item(i).TarjetaNo,
               Clave: res.rows.item(i).Clave,
               Cuenta: res.rows.item(i).Cuenta,
+              FechaCreacion : res.rows.item(i).FechaCreacion
              });
           }
         }
@@ -88,6 +90,34 @@ export class BasedatosService {
     }
 
     addCliente(cliente : Cliente){
+
+      let  FechaCreacion = new Date()
+
+      let data = [
+        cliente.Cedula,
+        cliente.Nombres, 
+        cliente.Apellidos,
+        cliente.FechaNacimiento,
+        cliente.Foto,
+        cliente.Sexo,
+        cliente.Direccion,
+        cliente.Celular,
+        cliente.Ocupacion,
+        cliente.Estado,
+        cliente.Banco,
+        cliente.TarjetaNo,
+        cliente.Clave,
+        cliente.Cuenta,
+        FechaCreacion
+      ];
+      return this.database.executeSql(`INSERT INTO Cliente 
+      (Cedula, Nombres, Apellidos, FechaNacimiento,Foto,Sexo,Direccion,Celular,Ocupacion,
+       Estado,Banco,TarjetaNo,Clave,Cuenta,FechaCreacion) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`, data).then(res => {
+        this.loadCliente();
+      });
+    }
+
+    updateCliente(IdCliente: number , cliente:Cliente){
       let data = [
         cliente.Cedula,
         cliente.Nombres, 
@@ -104,11 +134,19 @@ export class BasedatosService {
         cliente.Clave,
         cliente.Cuenta
       ];
-      return this.database.executeSql(`INSERT INTO Cliente 
-      (Cedula, Foto, Nombres, Apellidos,Sexo,FechaNacimiento,Direccion,Ocupacion,Celular,
-       Estado,Banco,TarjetaNo,Clave,Cuenta) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)`, data).then(res => {
+
+      return this.database.executeSql(`UPDATE cliente SET 
+       Cedula = ?, Nombres = ?, Apellidos = ?, FechaNacimiento = ?, Foto = ?,  Sexo= ?,
+       Direccion = ? ,Celular = ? , Ocupacion = ? , Estado = ? , Banco = ? , TarjetaNo = ?,
+       Clave = ? , Cuenta = ? WHERE Id = ${IdCliente}`, data).then(()=>{
         this.loadCliente();
-      });
+       })
+    }
+
+    deleteCliente(idCliente : number){
+      return this.database.executeSql('DELETE FROM cliente WHERE Id = ?', [idCliente]).then(()=>{
+        this.loadCliente();
+      })
     }
 
 

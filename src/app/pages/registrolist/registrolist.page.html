@@ -1,17 +1,36 @@
-<app-header> </app-header>
+<!-- <app-header> </app-header> -->
 
-<ion-content>
+<ion-content color="fondo">
 
   <div class="container m-top">
     <div class="row">
 
       <div class="col-sm-12 col-md-6 col-lg-4">
-
-        <div class="card-register">
-
+        <div class="card-register" [routerLink]="['cliente']">
+          <div class="list-header">
+            <div>
+              <fa-icon icon="users" class="user-icon"></fa-icon>
+            </div>
+          </div>
+          <div class="descripcion-persona">
+            <p>Personas</p>
+          </div>
         </div>
-       
       </div>
+
+      <div class="col-sm-12 col-md-6 col-lg-4">
+        <div class="card-register" [routerLink]="['prestamo']">
+          <div class="list-header">
+            <div>
+              <fa-icon icon="piggy-bank" class="prestamo-icon"></fa-icon>
+            </div>
+          </div>
+          <div class="descripcion-prestamo">
+            <p>Prestamos</p>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 

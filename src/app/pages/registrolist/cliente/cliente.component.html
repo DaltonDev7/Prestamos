@@ -1,0 +1,39 @@
+
+<ion-content>
+
+  <div class="m-list" color="fondo">
+
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12">
+          <ion-searchbar animated (ionChange)="buscarCliente( $event )"></ion-searchbar>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+
+    <div *ngFor="let cliente of listCliente | filtro: textoBuscar: 'Nombres'">
+      <div class="card-person" [routerLink]="['edit', cliente.Id]">
+        <div class="ft-person">
+          <ion-avatar>
+            <img src="/assets/img-default/default-profile.png" class="foto">
+          </ion-avatar>
+        </div>
+        <div class="info-person">
+          <div>
+            <h6>{{cliente.Nombres}}</h6>
+            <p>{{cliente.Cedula}}</p>
+            <p>{{cliente.Celular}}</p>
+          </div>
+          <div class="d-flex align-items-center">
+            <p>{{cliente.FechaCreacion | date}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+
+  </div>
+
+</ion-content>

@@ -27,6 +27,7 @@ export class RegistrarClientePage implements OnInit {
   permiso1 = false;
   permiso2 = false;
 
+   fecha;
 
   constructor(
     private formsBuilderService: FormsBuilderService,
@@ -53,6 +54,8 @@ export class RegistrarClientePage implements OnInit {
 
     this.cedulaId = document.getElementById('cedula-id');
 
+  
+
   }
 
 
@@ -62,7 +65,7 @@ export class RegistrarClientePage implements OnInit {
       await this.toasMessageService.showClienteInvalid();
     } else {
 
-      this.validateMask();
+     // this.validateMask();
 
       this.baseDatosService.addCliente(
         this.clienteForm.value
@@ -70,6 +73,8 @@ export class RegistrarClientePage implements OnInit {
         this.permiso2 = true
         this.clienteForm.reset();
         this.toasMessageService.showMessageClienteSaved();
+      }).catch((err)=>{
+        console.log(JSON.stringify(err))
       })
     }
   }
@@ -85,6 +90,7 @@ export class RegistrarClientePage implements OnInit {
 
 
   validateMask() {
+    console.log('ejecutado')
     let cedula = this.clienteForm.get('Cedula').value;
     let celular = this.clienteForm.get('Celular').value;
 

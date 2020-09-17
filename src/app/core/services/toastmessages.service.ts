@@ -30,6 +30,28 @@ export class ToastMessage {
         return toast.present();
     }
 
+    async showMessageClienteUpdate() {
+        const toast = await this.toastController.create({
+           message: 'Cliente Actualizado Correctamente',
+           position: 'bottom',
+           duration: 3000
+       });
+       return toast.present();
+   }
+
+   async showMessageClienteDelete() {
+    const toast = await this.toastController.create({
+       message: 'Cliente Eliminado',
+       position: 'bottom',
+       duration: 3000
+   });
+   return toast.present();
+}
+
+
+
+
+
 
 
 }
