@@ -1,5 +1,5 @@
 
-<ion-content>
+<ion-content color="fondo">
 
   <div class="m-list" color="fondo">
 
@@ -22,8 +22,8 @@
         <div class="info-person">
           <div>
             <h6>{{cliente.Nombres}}</h6>
-            <p>{{cliente.Cedula}}</p>
-            <p>{{cliente.Celular}}</p>
+            <p>{{cliente.Cedula | mask: '000-0000000-0'}}</p>
+            <p>{{cliente.Celular | mask: '000-000-0000'}}</p>
           </div>
           <div class="d-flex align-items-center">
             <p>{{cliente.FechaCreacion | date}}</p>

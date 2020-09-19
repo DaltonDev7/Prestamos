@@ -11,6 +11,20 @@
 
                 <div class="col-sm-12 col-md-6 col-lg-4">
                     <div class="form-group">
+                        <label for="">Cedula Cliente</label>
+                        <input type="text" class="form-control" mask="000-0000000-0" formControlName="CedulaCliente" upperCase>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="">Nombre Cliente</label>
+                        <input type="text" class="form-control" formControlName="NombresCliente" upperCase>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="form-group">
                         <label for="">Tipo Prestamo</label>
                         <input type="text" class="form-control" formControlName="Tipo" upperCase>
                     </div>
@@ -26,7 +40,7 @@
                 <div class="col-sm-12 col-md-6 col-lg-4">
                     <div class="form-group">
                         <label for="">Monto Prestamo</label>
-                        <input type="number" class="form-control" formControlName="Monto" upperCase >
+                        <input type="number" class="form-control" formControlName="Monto" upperCase>
                     </div>
                 </div>
 
@@ -55,6 +69,20 @@
                     <div class="form-group">
                         <label for="">Interes</label>
                         <input type="number" class="form-control" formControlName="InteresGenerar" upperCase >
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="">Estado</label>
+                        <ng-select 
+                        bindLabel="text" 
+                        bindValue="id" 
+                        upperCase
+                        placeholder="Seleccione" 
+                        [items]="estadoCombox"
+                        formControlName="EstadoPrestamo">
+                        </ng-select>
                     </div>
                 </div>
 

@@ -13,7 +13,8 @@ CREATE TABLE IF NOT EXISTS cliente(
     Banco TEXT NULL,
     TarjetaNo TEXT NULL,
     Clave TEXT NULL,
-    Cuenta TEXT NULL
+    Cuenta TEXT NULL,
+    FechaCreacion DATETIME
 );
 
 CREATE UNIQUE INDEX IF NOT EXISTS index_cedula ON cliente(Cedula);
@@ -33,10 +34,15 @@ CREATE TABLE IF NOT EXISTS prestamo(
      ValorCuotas DECIMAL NULL,
      TotalPago DECIMAL NULL,
      InteresGenerar DECIMAL NULL,
+     EstadoPrestamo TEXT NULL,
+     FechaCreacionPrestamo DATETIME,
      FOREIGN KEY(IdCliente) REFERENCES cliente(Id)
 );
 
 --ALTER TABLE prestamo ADD COLUMN FechaCreacion DATETIME;
+-- ALTER TABLE prestamo ADD COLUMN EstadoPrestamo TEXT NULL;
+-- ALTER TABLE prestamo ADD COLUMN FechaCreacion DATETIME;
+
 
 CREATE TABLE IF NOT EXISTS cuota(
     Id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -46,6 +52,7 @@ CREATE TABLE IF NOT EXISTS cuota(
     Pago DECIMAL NULL,
     Capital DECIMAL NULL,
     CapitalFinal DECIMAL NULL,
+    FechaCreacionCuota DATETIME,
     FOREIGN KEY(IdPrestamo) REFERENCES prestamo(Id)
 );
 

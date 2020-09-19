@@ -1,0 +1,40 @@
+.m-list{
+    margin-top: 56px;
+}
+
+.card-person{
+    width: 100%;
+    padding-right: 20px;
+    padding-left: 16px;
+    display: flex;
+    margin-bottom: 18px;
+}
+
+.ft-person{
+    //width: 20%;
+}
+
+.info-person{
+    width: 100%;
+    margin-left: 12px;
+    border-bottom: 0.5px solid rgba(112, 112, 112, 0.685);
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 4px;
+}
+.info-person h5{
+margin-bottom: 2px;
+}
+
+
+.info-person p{
+    margin: 0px;
+}
+.info-fecha{
+    align-items: center;
+}
+
+.foto{
+//    width: 10%;
+//    border-radius: 350px;
+}

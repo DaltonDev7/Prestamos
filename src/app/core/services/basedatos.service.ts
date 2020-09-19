@@ -5,6 +5,7 @@ import { SQLite, SQLiteObject } from '@ionic-native/sqlite/ngx';
 import { HttpClient } from '@angular/common/http';
 import { SQLitePorter } from '@ionic-native/sqlite-porter/ngx';
 import { Cliente } from '../interfaces/cliente';
+import { take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,7 @@ export class BasedatosService {
         console.log(JSON.stringify(x))
         console.log("a crear la base de datos")
         this.sqlite.create({
-          name:'prestamos.db',
+          name:'sistemaprestamos2.db',
           location :'default'
         })
         .then((db:SQLiteObject )=>{
@@ -47,7 +48,7 @@ export class BasedatosService {
           console.log("querys insertado.")
           this.dbReady.next(true);
           console.log("ya esta true")
-          this.loadCliente();
+         
         }).catch(e => console.error(JSON.stringify(e)))
       })  
     }
@@ -86,7 +87,7 @@ export class BasedatosService {
     }
 
     getClientes(){
-      return this.clienteList.asObservable();
+      return this.clienteList.asObservable().pipe(take(1))
     }
 
     addCliente(cliente : Cliente){
@@ -110,10 +111,10 @@ export class BasedatosService {
         cliente.Cuenta,
         FechaCreacion
       ];
-      return this.database.executeSql(`INSERT INTO Cliente 
+      return this.database.executeSql(`INSERT INTO cliente 
       (Cedula, Nombres, Apellidos, FechaNacimiento,Foto,Sexo,Direccion,Celular,Ocupacion,
        Estado,Banco,TarjetaNo,Clave,Cuenta,FechaCreacion) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`, data).then(res => {
-        this.loadCliente();
+       // this.loadCliente();
       });
     }
 

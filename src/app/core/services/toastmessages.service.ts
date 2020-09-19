@@ -21,9 +21,18 @@ export class ToastMessage {
         return toast.present();
     }
 
-     async showMessageClienteSaved() {
-         const toast = await this.toastController.create({
+    async showMessageClienteSaved() {
+        const toast = await this.toastController.create({
             message: 'Cliente Registrado',
+            position: 'bottom',
+            duration: 3000
+        });
+        return toast.present();
+    }
+
+    async showMessagePrestamoSaved() {
+        const toast = await this.toastController.create({
+            message: 'Prestamo Registrado',
             position: 'bottom',
             duration: 3000
         });
@@ -32,21 +41,34 @@ export class ToastMessage {
 
     async showMessageClienteUpdate() {
         const toast = await this.toastController.create({
-           message: 'Cliente Actualizado Correctamente',
-           position: 'bottom',
-           duration: 3000
-       });
-       return toast.present();
-   }
+            message: 'Cliente Actualizado Correctamente',
+            position: 'bottom',
+            duration: 3000
+        });
+        return toast.present();
+    }
 
-   async showMessageClienteDelete() {
-    const toast = await this.toastController.create({
-       message: 'Cliente Eliminado',
-       position: 'bottom',
-       duration: 3000
-   });
-   return toast.present();
-}
+    async showMessageClienteDelete() {
+        const toast = await this.toastController.create({
+            message: 'Cliente Eliminado',
+            position: 'bottom',
+            duration: 3000
+        });
+        return toast.present();
+    }
+
+    async cedulaNotFound() {
+        const toast = await this.toastController.create({
+            message: 'Esta cedula aun no esta registrada',
+            position: 'bottom',
+            duration: 3000
+        });
+        return toast.present();
+    }
+
+
+
+
 
 
 

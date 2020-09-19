@@ -24,10 +24,12 @@ export class ClienteComponent implements OnInit {
 
     this.baseDatosService.getDataBaseState().subscribe((data) => {
       if (data) {
-        this.baseDatosService.getClientes().subscribe((data) => {
-          this.listCliente = data
-          console.log(JSON.stringify(data))
+        this.baseDatosService.loadCliente().then(()=>{
+          this.baseDatosService.getClientes().subscribe((clientes)=>{
+            this.listCliente = clientes
+          })
         })
+       
       }
     })
 

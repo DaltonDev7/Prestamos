@@ -34,6 +34,7 @@ export class FormsBuilderService {
     getPrestamoForm(){
         return this.fb.group({
             'CedulaCliente':[null,[Validators.required]],
+            'NombresCliente':[{ value: null, disabled: true }],
             'IdCliente':[null],
             'Tipo':[null,[Validators.required]],
             'Fecha':[null,[Validators.required]],
@@ -41,7 +42,8 @@ export class FormsBuilderService {
             'CantidadCuotas':[null,[Validators.required]],
             'ValorCuotas':[null,[Validators.required]],
             'TotalPago':[null,[Validators.required]],
-            'InteresGenerar':[null]
+            'InteresGenerar':[null],
+            'EstadoPrestamo':[null,[Validators.required]]
         })
     }
 
