@@ -58,7 +58,7 @@ export class BasedatosService {
     }
 
     loadCliente(){
-      return this.database.executeSql('SELECT * FROM cliente', []).then((res)=>{
+      return this.database.executeSql('SELECT * FROM cliente ORDER BY FechaCreacion DESC', []).then((res)=>{
         let items:any = [];
         if (res.rows.length > 0) {
           for (var i = 0; i < res.rows.length; i++) { 
@@ -87,7 +87,7 @@ export class BasedatosService {
     }
 
     getClientes(){
-      return this.clienteList.asObservable().pipe(take(1))
+      return this.clienteList.asObservable()
     }
 
     addCliente(cliente : Cliente){
@@ -114,7 +114,7 @@ export class BasedatosService {
       return this.database.executeSql(`INSERT INTO cliente 
       (Cedula, Nombres, Apellidos, FechaNacimiento,Foto,Sexo,Direccion,Celular,Ocupacion,
        Estado,Banco,TarjetaNo,Clave,Cuenta,FechaCreacion) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`, data).then(res => {
-       // this.loadCliente();
+        this.loadCliente();
       });
     }
 

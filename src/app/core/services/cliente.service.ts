@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
+import { take } from 'rxjs/operators';
 import { BasedatosService } from './basedatos.service';
 
 @Injectable({
@@ -54,7 +55,7 @@ export class ClienteService {
   }
 
   getClienteCedula() {
-    return this.clienteCedula.asObservable();
+    return this.clienteCedula.asObservable().pipe(take(1));
   }
 
 
@@ -86,7 +87,7 @@ export class ClienteService {
           }
         }
 
-        this.clienteCedula.next(items);
+        this.clienteCedula.next(items)
 
       }).catch((err) => {
         console.log("error al obtener cleinte bt cedula" + JSON.stringify(err));

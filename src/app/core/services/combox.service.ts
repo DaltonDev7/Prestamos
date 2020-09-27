@@ -77,5 +77,11 @@ export class ComboxService {
     { id: "INDEFINIDO", text: "INDEFINIDO"}
   ]
 
+  tiempoPagar : any[] = [
+    { id: 4 , text: "SEMANAL"},
+    { id: 2 , text: "QUINCENAL"},
+    { id: 1 , text: "MENSUAL"}
+  ]
+
 
 }

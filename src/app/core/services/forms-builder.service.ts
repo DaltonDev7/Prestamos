@@ -33,17 +33,47 @@ export class FormsBuilderService {
     //Solo foto, Banco, tarjeta, clave y cuenta pueden ser null
     getPrestamoForm(){
         return this.fb.group({
-            'CedulaCliente':[null,[Validators.required]],
-            'NombresCliente':[{ value: null, disabled: true }],
             'IdCliente':[null],
             'Tipo':[null,[Validators.required]],
-            'Fecha':[null,[Validators.required]],
+            'Fecha':[null],
             'Monto':[null,[Validators.required]],
+            'TiempoPagar':[null,[Validators.required]],
             'CantidadCuotas':[null,[Validators.required]],
-            'ValorCuotas':[null,[Validators.required]],
-            'TotalPago':[null,[Validators.required]],
-            'InteresGenerar':[null],
+            'ValorCuotas':[{ value: null, disabled: true }],
+            'TotalPago':[{ value: null, disabled: true }],
+            'InteresGenerar':[null,[Validators.required]],
             'EstadoPrestamo':[null,[Validators.required]]
+        })
+    }
+
+    getClientePrestamo(){
+        return this.fb.group({
+           // 'Cedula':[null,[Validators.required]],
+            'Nombres':[{ value: null, disabled: true }],
+            'Apellidos':[{ value: null, disabled: true }],
+            'Direccion':[{ value: null, disabled: true }],
+            'Sexo':[{ value: null, disabled: true }],
+            'Celular':[{ value: null, disabled: true }],
+        })
+    }
+
+    getAddClientePrestamoBuilder(){
+        return this.fb.group({
+            ...this.getClientePrestamo().controls,
+            'Cedula':[null,[Validators.required]]
+        })
+    }
+
+    getEditClientePrestamo(){
+        return this.fb.group({
+            ...this.getClientePrestamo().controls,
+            'Cedula':[{ value: null, disabled: true }]
+        })
+    }
+
+    getEstadosPrestamosForm(){
+        return this.fb.group({
+            'Estado':[null]
         })
     }
 

@@ -17,10 +17,13 @@ export class RegistrarPrestamoPage implements OnInit {
 
   //ATRIBUTOS
   prestamoForm: FormGroup;
+  clienteForm : FormGroup;
   cliente:Cliente;
   cedula;
 
   estadoCombox:Combox[];
+  tipoPrestamo:Combox[];
+  tiempoPagarCombox:any[];
 
   mensaje = 'este cedula no existe'
   permiso = false;
@@ -34,10 +37,13 @@ export class RegistrarPrestamoPage implements OnInit {
 
   ngOnInit() {
     this.prestamoForm = this.formBuilderServices.getPrestamoForm();
+    this.clienteForm = this.formBuilderServices.getAddClientePrestamoBuilder();
 
     this.estadoCombox = this.comboxService.EstadoCombox;
+    this.tipoPrestamo = this.comboxService.tipoPrestamo;
+    this.tiempoPagarCombox = this.comboxService.tiempoPagar;
 
-    this.prestamoForm.get('CedulaCliente').valueChanges.subscribe((data)=>{
+    this.clienteForm.get('Cedula').valueChanges.subscribe((data)=>{
       console.log(data.length)
       console.log(data)
       if(data.length == 11){
@@ -49,6 +55,11 @@ export class RegistrarPrestamoPage implements OnInit {
         })
       }
     })
+
+    this.prestamoService.setDisabled(this.prestamoForm);
+
+    this.prestamoService.setValidateCampos(this.prestamoForm)
+      this.prestamoService.calcularCuota(this.prestamoForm)
 
  
 
@@ -77,10 +88,13 @@ export class RegistrarPrestamoPage implements OnInit {
       console.log("obteniedo datos " + JSON.stringify(cliente))
       if(cliente[0]){
         this.cliente = cliente[0];
-        let nombreCompleto = this.cliente.Nombres + " " + this.cliente.Apellidos
-        this.prestamoForm.patchValue({'NombresCliente' : nombreCompleto})
+        this.clienteForm.patchValue(this.cliente);
       }else{
-        this.prestamoForm.get('NombresCliente').setValue(null);
+         this.clienteForm.get('Nombres').setValue(null);
+         this.clienteForm.get('Apellidos').setValue(null);
+         this.clienteForm.get('Direccion').setValue(null);
+         this.clienteForm.get('Sexo').setValue(null);
+         this.clienteForm.get('Celular').setValue(null);
          this.toastService.cedulaNotFound();
       }
     },(err) => console.log(JSON.stringify(err)))

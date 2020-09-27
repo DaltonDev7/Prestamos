@@ -5,13 +5,15 @@ import { PrestamoComponent } from './prestamo.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { EditprestamoComponent } from '../editprestamo/editprestamo.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FiltroPipe } from 'src/app/core/pipes/cedula.pipe';
 
 
 
 @NgModule({
   declarations: [
     PrestamoComponent,
-    EditprestamoComponent
+    EditprestamoComponent,
+    FiltroPipe
   ],
   imports: [
     CommonModule,

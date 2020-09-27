@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { PrestamoComponent } from './prestamo.component';
 import { EditprestamoComponent } from '../editprestamo/editprestamo.component';
+import { EditPrestamoResolver } from 'src/app/core/resolvers/edit-prestamo.resolver';
 
 const routes: Routes = [
   {
@@ -11,7 +12,10 @@ const routes: Routes = [
   },
   {
     path:'edit/:id',
-    component: EditprestamoComponent
+    component: EditprestamoComponent,
+    resolve :{
+      prestamo : EditPrestamoResolver
+    }
   }
 ]
 

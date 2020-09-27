@@ -2,16 +2,16 @@
 <ion-content color="fondo">
     <div class="m-list" color="fondo">
 
-        <!-- <ion-grid>
+        <ion-grid>
           <ion-row>
             <ion-col size="12">
-              <ion-searchbar animated (ionChange)="buscarCliente( $event )"></ion-searchbar>
+              <ion-searchbar animated (ionChange)="buscarPrestamo( $event )"></ion-searchbar>
             </ion-col>
           </ion-row>
-        </ion-grid> -->
+        </ion-grid>
     
     
-        <div *ngFor="let prestamo of listPrestamo">
+        <div *ngFor="let prestamo of listPrestamo | filtro: textoBuscar: 'Nombres'">
           <div class="card-person" [routerLink]="['edit', prestamo.Id]">
             <div class="ft-person">
               <ion-avatar>
@@ -20,8 +20,12 @@
             </div>
             <div class="info-person">
               <div class="d-flex align-items-center">
-                <p> Monto : {{prestamo.Monto | mask: 'separator':','}}</p>
-                <p>Solicitante : {{prestamo.Nombres}}</p>
+                <div>
+                  <p> Monto : {{prestamo.Monto | mask: 'separator':','}}</p>
+                </div>
+                <div>
+                  <p>Solicitante : {{prestamo.Nombres}}</p>
+                </div>
               </div>
               <div class="d-flex align-items-center">
                 <p>{{prestamo.FechaCreacionPrestamo | date}}</p>

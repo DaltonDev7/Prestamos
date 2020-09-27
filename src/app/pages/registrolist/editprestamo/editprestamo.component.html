@@ -2,99 +2,138 @@
 
 
 <ion-content color="fondo">
-  <div class="container m-top">
-      <h5>Registar Prestamo</h5>
+    <div class="container m-top">
+        <h5>Editar Prestamo</h5>
+        <h5>Datos del Cliente</h5>
+        <form [formGroup]="clienteForm">
+            <div class="row">
+               
 
-      <form [formGroup]="prestamoForm">
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="">Cedula Cliente</label>
+                        <input type="text" class="form-control" mask="000-0000000-0" formControlName="Cedula"
+                            upperCase>
+                    </div>
+                </div>
 
-          <div class="row">
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="">Nombres</label>
+                        <input type="text" class="form-control" formControlName="Nombres" upperCase>
+                    </div>
+                </div>
 
-              <div class="col-sm-12 col-md-6 col-lg-4">
-                  <div class="form-group">
-                      <label for="">Cedula Cliente</label>
-                      <input type="text" class="form-control" mask="000-0000000-0" formControlName="CedulaCliente" upperCase>
-                  </div>
-              </div>
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="">Apellidos</label>
+                        <input type="text" class="form-control" formControlName="Apellidos" upperCase>
+                    </div>
+                </div>
 
-              <div class="col-sm-12 col-md-6 col-lg-4">
-                  <div class="form-group">
-                      <label for="">Nombre Cliente</label>
-                      <input type="text" class="form-control" formControlName="NombresCliente" upperCase>
-                  </div>
-              </div>
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="">Sexo</label>
+                        <input type="text" class="form-control" formControlName="Sexo" upperCase>
+                    </div>
+                </div>
 
-              <div class="col-sm-12 col-md-6 col-lg-4">
-                  <div class="form-group">
-                      <label for="">Tipo Prestamo</label>
-                      <input type="text" class="form-control" formControlName="Tipo" upperCase>
-                  </div>
-              </div>
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="">Direccion</label>
+                        <input type="text" class="form-control" formControlName="Direccion" upperCase>
+                    </div>
+                </div>
 
-              <div class="col-sm-12 col-md-6 col-lg-4">
-                  <div class="form-group">
-                      <label for="">Fecha</label>
-                      <input type="text" class="form-control" formControlName="Fecha" upperCase>
-                  </div>
-              </div>
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="">Celular</label>
+                        <input type="text" class="form-control" mask="000-000-0000" formControlName="Celular" upperCase>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 
-              <div class="col-sm-12 col-md-6 col-lg-4">
-                  <div class="form-group">
-                      <label for="">Monto Prestamo</label>
-                      <input type="number" class="form-control" formControlName="Monto" upperCase>
-                  </div>
-              </div>
+    <div class="container"> 
+        <h5>Datos del Prestamo</h5>
 
-              <div class="col-sm-12 col-md-6 col-lg-4">
-                  <div class="form-group">
-                      <label for="">Cantidad Cuotas</label>
-                      <input type="number" class="form-control" formControlName="CantidadCuotas" upperCase>
-                  </div>
-              </div>
+        <form [formGroup]="prestamoForm">
+            <div class="row">
+                
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="">Tipo Prestamo</label>
+                        <input type="text" class="form-control" formControlName="Tipo" upperCase>
+                    </div>
+                </div>
 
-              <div class="col-sm-12 col-md-6 col-lg-4">
-                  <div class="form-group">
-                      <label for="">Valor Cuotas</label>
-                      <input type="number" class="form-control" formControlName="ValorCuotas" upperCase >
-                  </div>
-              </div>
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="">Fecha</label>
+                        <input type="text" class="form-control" formControlName="Fecha" upperCase>
+                    </div>
+                </div>
 
-              <div class="col-sm-12 col-md-6 col-lg-4">
-                  <div class="form-group">
-                      <label for="">Total Pago</label>
-                      <input type="number" class="form-control" formControlName="TotalPago" upperCase >
-                  </div>
-              </div>
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="">Monto Prestamo</label>
+                        <input type="number" class="form-control" formControlName="Monto" upperCase>
+                    </div>
+                </div>
 
-              <div class="col-sm-12 col-md-6 col-lg-4">
-                  <div class="form-group">
-                      <label for="">Interes</label>
-                      <input type="number" class="form-control" formControlName="InteresGenerar" upperCase >
-                  </div>
-              </div>
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="">Cantidad Cuotas</label>
+                        <input type="number" class="form-control" formControlName="CantidadCuotas" upperCase>
+                    </div>
+                </div>
 
-              <div class="col-sm-12 col-md-6 col-lg-4">
-                  <div class="form-group">
-                      <label for="">Estado</label>
-                      <ng-select 
-                      bindLabel="text" 
-                      bindValue="id" 
-                      upperCase
-                      placeholder="Seleccione" 
-                      [items]="estadoCombox"
-                      formControlName="EstadoPrestamo">
-                      </ng-select>
-                  </div>
-              </div>
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="">Valor Cuotas</label>
+                        <input type="number" class="form-control" formControlName="ValorCuotas" upperCase>
+                    </div>
+                </div>
 
-          </div>
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="">Total Pago</label>
+                        <input type="number" class="form-control" formControlName="TotalPago" upperCase>
+                    </div>
+                </div>
 
-      </form>
-  </div>
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="">Interes</label>
+                        <input type="number" class="form-control" formControlName="InteresGenerar" upperCase>
+                    </div>
+                </div>
 
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-      <ion-fab-button color="success" (click)="savePrestamo()">
-          <ion-icon name="save-sharp"></ion-icon>
-      </ion-fab-button>
-  </ion-fab>
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="">Estado</label>
+                        <ng-select bindLabel="text" bindValue="id" upperCase placeholder="Seleccione"
+                            [items]="estadoCombox" formControlName="EstadoPrestamo">
+                        </ng-select>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div> 
+
+
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button >
+            <ion-icon name="add-outline"></ion-icon>
+        </ion-fab-button>
+
+        <ion-fab-list side="top">
+            <ion-fab-button color="success" (click)="editPrestamo()"><ion-icon name="save-outline" ></ion-icon></ion-fab-button>
+            <ion-fab-button color="danger" (click)="eliminarPrestamo()"> <ion-icon name="trash-outline" ></ion-icon></ion-fab-button>
+        </ion-fab-list>
+    </ion-fab>
+
+
 
 </ion-content>

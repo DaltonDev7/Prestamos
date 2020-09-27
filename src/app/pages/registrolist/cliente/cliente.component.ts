@@ -21,15 +21,13 @@ export class ClienteComponent implements OnInit {
 
   ngOnInit() {
 
+    this.baseDatosService.loadCliente();
 
     this.baseDatosService.getDataBaseState().subscribe((data) => {
       if (data) {
-        this.baseDatosService.loadCliente().then(()=>{
-          this.baseDatosService.getClientes().subscribe((clientes)=>{
-            this.listCliente = clientes
-          })
+        this.baseDatosService.getClientes().subscribe((clientes)=>{
+          this.listCliente = clientes
         })
-       
       }
     })
 

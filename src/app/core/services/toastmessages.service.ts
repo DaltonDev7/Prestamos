@@ -48,6 +48,15 @@ export class ToastMessage {
         return toast.present();
     }
 
+    async showMessagePrestamoUpdate() {
+        const toast = await this.toastController.create({
+            message: 'Prestamo Actualizado Correctamente',
+            position: 'bottom',
+            duration: 3000
+        });
+        return toast.present();
+    }
+
     async showMessageClienteDelete() {
         const toast = await this.toastController.create({
             message: 'Cliente Eliminado',

@@ -60,6 +60,31 @@ body{
    // background-color: #f00;
 }
 
+//alerts
+.alert-success-personalizado .alert-wrapper {
+    background: #e5e5e5;
+    max-width : 700px;
+    min-width: 250px;
+    width: 350px;
+  // width: 600px;
+}
+
+.my-custom-class .alert-wrapper {
+    background: #e5e5e5;
+    max-width : 400px;
+    width: 400px;
+}
+
+
+
+.my-custom-class .alert-wrapper p {
+    text-align: center;
+    font-size: 24px;
+    font-family: 'Ubuntu';
+    margin: 0px;
+}
+
+
 
 //fonts
 

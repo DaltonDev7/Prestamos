@@ -4,6 +4,7 @@ import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Cliente } from 'src/app/core/interfaces/cliente';
 import { Combox } from 'src/app/core/interfaces/combox';
+import { AlertService } from 'src/app/core/services/alert.service';
 import { BasedatosService } from 'src/app/core/services/basedatos.service';
 import { ClienteService } from 'src/app/core/services/cliente.service';
 import { ComboxService } from 'src/app/core/services/combox.service';
@@ -31,6 +32,7 @@ export class EditclienteComponent implements OnInit {
     public comboxService : ComboxService,
     public clienteService : ClienteService,
     private activeRoute: ActivatedRoute,
+    public alertService : AlertService,
     public baseDatosService : BasedatosService,
     public toasMessageService: ToastMessage,
     private router : Router
@@ -52,7 +54,6 @@ export class EditclienteComponent implements OnInit {
     },
     (erro) => console.log("error en el edit cliente " + JSON.stringify(erro))
     )
-    
   }
 
 
@@ -61,17 +62,7 @@ export class EditclienteComponent implements OnInit {
       await this.toasMessageService.showClienteInvalid();
     }else{
       this.baseDatosService.updateCliente(this.cliente.Id , this.clienteForm.value).then((data)=>{
-        this.toasMessageService.showMessageClienteUpdate()
-
-        // let currentRoute = this.router.url.split('/');
-
-        // if(currentRoute.includes('edit')){
-        //   currentRoute.splice(currentRoute.indexOf('edit'), currentRoute.length);
-        // }else{
-        //   currentRoute.pop();
-        // }
-        // this.router.createUrlTree([currentRoute.join('/')]);
-
+        this.alertService.alertSuccess("Cliente")
       }).catch((err)=>{
         console.log(JSON.stringify(err))
       })
@@ -80,10 +71,8 @@ export class EditclienteComponent implements OnInit {
 
   eliminarCliente(){
     this.baseDatosService.deleteCliente(this.cliente.Id).then((data)=>{
-       this.toasMessageService.showMessageClienteDelete();
-      //  let currentRoute = this.router.url.split('/');
-      //  currentRoute.pop();
-      //  this.router.navigate([currentRoute.join('/')]);
+        this.alertService.alertEliminar("Cliente");
+  
     }).catch((err)=>{
         console.log(JSON.stringify(err))
       })

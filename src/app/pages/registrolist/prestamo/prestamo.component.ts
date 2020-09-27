@@ -12,6 +12,7 @@ export class PrestamoComponent implements OnInit {
 
   //atributos
   listPrestamo;
+  textoBuscar:string = '';
   data;
   constructor(
     public prestamoService: PrestamoService,
@@ -19,13 +20,14 @@ export class PrestamoComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
+    this.prestamoService.loadPrestamo();
+    
     this.baseDatosService.getDataBaseState().subscribe((data) => {
       if (data) {
-        this.prestamoService.loadPrestamo().then(()=>{
-          this.prestamoService.getPrestamos().subscribe((prestamos)=>{
-            console.log("prestamos" + JSON.stringify(prestamos))
-            this.listPrestamo = prestamos
-          })
+        this.prestamoService.getPrestamos().subscribe((prestamos)=>{
+          console.log("prestamos" + JSON.stringify(prestamos))
+          this.listPrestamo = prestamos
         })
       }
     })
@@ -46,6 +48,10 @@ export class PrestamoComponent implements OnInit {
       }
     ]
 
+  }
+
+  buscarPrestamo(event){
+    this.textoBuscar = event.detail.value;
   }
 
 }
