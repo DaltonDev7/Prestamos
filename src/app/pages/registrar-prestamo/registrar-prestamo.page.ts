@@ -17,23 +17,23 @@ export class RegistrarPrestamoPage implements OnInit {
 
   //ATRIBUTOS
   prestamoForm: FormGroup;
-  clienteForm : FormGroup;
-  cliente:Cliente;
+  clienteForm: FormGroup;
+  cliente: Cliente;
   cedula;
 
-  estadoCombox:Combox[];
-  tipoPrestamo:Combox[];
-  tiempoPagarCombox:any[];
+  estadoCombox: Combox[];
+  tipoPrestamo: Combox[];
+  frecuenciaPagoCombox: any[];
 
   mensaje = 'este cedula no existe'
   permiso = false;
 
   constructor(
-     public prestamoService : PrestamoService,
-     public comboxService : ComboxService,
-     public formBuilderServices : FormsBuilderService,
-     private clienteService : ClienteService,
-     public toastService : ToastMessage) { }
+    public prestamoService: PrestamoService,
+    public comboxService: ComboxService,
+    public formBuilderServices: FormsBuilderService,
+    private clienteService: ClienteService,
+    public toastService: ToastMessage) { }
 
   ngOnInit() {
     this.prestamoForm = this.formBuilderServices.getPrestamoForm();
@@ -41,63 +41,69 @@ export class RegistrarPrestamoPage implements OnInit {
 
     this.estadoCombox = this.comboxService.EstadoCombox;
     this.tipoPrestamo = this.comboxService.tipoPrestamo;
-    this.tiempoPagarCombox = this.comboxService.tiempoPagar;
+    this.frecuenciaPagoCombox = this.comboxService.frecuenciaPago;
 
-    this.clienteForm.get('Cedula').valueChanges.subscribe((data)=>{
+    this.clienteForm.get('CedulaCliente').valueChanges.subscribe((data) => {
       console.log(data.length)
       console.log(data)
-      if(data.length == 11){
+      if (data.length == 11) {
         this.clienteService.getClienteByCedula(data).then(()=>{
-          this.getData()
-        }).catch((err)=>{
-          console.log("errro a subcribirme" + JSON.stringify(err))
-          this.permiso = true
+          this.getData();
         })
       }
     })
 
+    if(this.clienteService.clienteReadOnly != null){
+      this.cliente = this.clienteService.clienteReadOnly;
+    }
+
     this.prestamoService.setDisabled(this.prestamoForm);
 
+   
+
     this.prestamoService.setValidateCampos(this.prestamoForm)
-      this.prestamoService.calcularCuota(this.prestamoForm)
+    this.prestamoService.calcularCuota(this.prestamoForm)
 
- 
 
+
+  }
+
+  getData(){
+      this.clienteService.getClienteCedula().subscribe((cliente) => {
+        console.log("obteniedo datos " + JSON.stringify(cliente))
+        if (cliente[0]) {
+          this.cliente = cliente[0];
+          this.clienteForm.patchValue(this.cliente);
+        } else {
+          this.clienteForm.get('Nombres').setValue(null);
+          this.clienteForm.get('Apellidos').setValue(null);
+          this.clienteForm.get('Direccion').setValue(null);
+          this.clienteForm.get('Sexo').setValue(null);
+          this.clienteForm.get('Celular').setValue(null);
+          this.toastService.cedulaNotFound();
+        }
+        this.permiso = false
+      })
   }
 
 
 
-  async savePrestamo(){
-    if(this.prestamoForm.invalid){
-       await this.toastService.showClienteInvalid();
-    }  else{
-      this.prestamoForm.patchValue({'IdCliente': this.cliente.Id});
+
+  async savePrestamo() {
+    if (this.prestamoForm.invalid || this.clienteForm.invalid) {
+      await this.toastService.showClienteInvalid();
+    } else {
+      this.prestamoForm.patchValue({ 'IdCliente': this.cliente.Id });
       console.log(this.prestamoForm.value)
-      this.prestamoService.addPrestamo(this.prestamoForm.value).then((data)=>{
+      this.prestamoService.addPrestamo(this.prestamoForm.value).then((data) => {
         this.prestamoForm.reset();
         this.toastService.showMessagePrestamoSaved();
-      }).catch((err)=>{
+      }).catch((err) => {
         console.log("error al guardar prestamo" + JSON.stringify(err))
       })
     }
   }
 
 
-  async getData(){
-    this.clienteService.getClienteCedula().subscribe((cliente)=>{
-      console.log("obteniedo datos " + JSON.stringify(cliente))
-      if(cliente[0]){
-        this.cliente = cliente[0];
-        this.clienteForm.patchValue(this.cliente);
-      }else{
-         this.clienteForm.get('Nombres').setValue(null);
-         this.clienteForm.get('Apellidos').setValue(null);
-         this.clienteForm.get('Direccion').setValue(null);
-         this.clienteForm.get('Sexo').setValue(null);
-         this.clienteForm.get('Celular').setValue(null);
-         this.toastService.cedulaNotFound();
-      }
-    },(err) => console.log(JSON.stringify(err)))
-  }
 
 }

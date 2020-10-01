@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { Cuota } from '../interfaces/cuota';
 import { Prestamo } from '../interfaces/prestamo';
 import { BasedatosService } from './basedatos.service';
 
@@ -12,6 +13,7 @@ export class PrestamoService {
 
   prestamo = new BehaviorSubject([]);
   prestamoEdit = new BehaviorSubject([]);
+  lastPrestamo = new BehaviorSubject([]);
 
   constructor(
     public baseDatosService: BasedatosService
@@ -52,6 +54,27 @@ export class PrestamoService {
     })
   }
 
+  
+  obtenerUltimoPrestamo(){
+    return this.baseDatosService.database.executeSql(`select top 1 * from prestamo ORDER BY Id DESC`,[])
+    .then((res)=>{
+      let items:any = [];
+      if (res.rows.length > 0) {
+        for (var i = 0; i < res.rows.length; i++) {
+          items.push({
+            Id: res.rows.item(i).Id,
+            Tipo: res.rows.item(i).Tipo,
+            Monto: res.rows.item(i).Monto,
+            CantidadCuotas: res.rows.item(i).CantidadCuotas
+          });
+        }
+      }
+      this.lastPrestamo.next(items)
+    }).catch((err) => {
+      console.log("error al obtener el ultimo prestamo" + JSON.stringify(err))
+    })
+  }
+
   getPrestamos() {
     return this.prestamo.asObservable()
   }
@@ -77,12 +100,22 @@ export class PrestamoService {
       FechaCreacionPrestamo
     ]
 
+    let cuota:Cuota[] = [
+     
+    ]
+
     return this.baseDatosService.database.executeSql(`INSERT INTO prestamo 
     (IdCliente, Tipo, Fecha, Hora,Monto,CantidadCuotas,ValorCuotas,TotalPago,InteresGenerar,EstadoPrestamo,
       FechaCreacionPrestamo) VALUES (?,?,?,?,?,?,?,?,?,?,?)`, data).then(res => {
+        console.log("respuesta" + JSON.stringify(res))
       this.loadPrestamo();
+    }).catch((err)=>{
+      console.log("errror en el prestamo service")
     });
+
   }
+
+
 
   updatePrestamo(IdPrestamo: number, prestamo: Prestamo) {
     let data = [
@@ -169,13 +202,83 @@ export class PrestamoService {
 
   calcularCuota(prestamoForm: FormGroup) {
 
-    prestamoForm.get('CantidadCuotas').valueChanges.subscribe((cantidadCuotas) => {
-      let montoPrestamo = prestamoForm.get('Monto').value;
-      let interes = prestamoForm.get('InteresGenerar').value;
-      let tiempoPagar = prestamoForm.get('TiempoPagar').value;
+    /*
+    tipo prestamo
+    monto
+    frecuencia
 
-      interes = interes / tiempoPagar;
+    interes = 40
+    
+    */
+
+    /*
+      interes
+
+
+
+      diario = interes / 30.5 
+      semanal = interes / 4
+      quincenal = interes / 2
+      mensual  = interes / 1
+
+    */
+
+
+    prestamoForm.get('CantidadCuotas').valueChanges.subscribe((cantidadCuotas) => {
+      let montoPrestamo = parseInt(prestamoForm.get('Monto').value)
+      let interes = prestamoForm.get('InteresGenerar').value;
+      let frecuenciaPago = prestamoForm.get('frecuenciaPago').value;
+
+      interes = interes / frecuenciaPago;
       console.log(interes)
+      console.log(montoPrestamo)
+
+      /*
+      interes
+
+
+      monto interes
+      sacarle el porcento al capital(monto) * cuota
+
+      pago total
+      es la suma de monto interes + capital(monto)
+
+      valor cuota
+      total pago / cantidad cuota
+
+      pago capital
+      capital / numero de cuota
+
+      pago interes 
+      interes / cantida de cuota
+      ---------------------------------------------------------------
+      LO UNICO QUE SE SABE
+      INDEFINIDO
+      INTERES: EJ 9%
+      PAGO INTERES : INTERES(SACARLE EL PORCENTAJE) * CAPITAL
+
+      -------------------------------------------------------------------------
+      CUOTAS
+      IDPRESTAMO : ES EL ID DE LA TABLA PRESTAMO
+      NO : ES EL NUM DE LA CUOTA
+      FECHA: ES LA FECHA DONDE SE VA A PAGAR
+      CAPITAL: ES EL MONTO QUE SE PRESTO
+      VALOR :ES EL VALOR DE LA CUOTA
+      PAGO CAPITAL : ES LA DIVISION ENTRE MONTO / NUMERO DE CUOTAS
+      PAGO INTERES : ES LA DIVISION INTERES / CANTUDAD CUOTA
+      CAPITAL FINAL : ES LA RESTA CAPITAL INICIAL - PAGO CAPITAL
+
+      ----------------------------------------------------------------------------
+      LO UNICO QUE SE SABE
+      CUOTAS INDEFINIDO
+      CAPITAL: ES EL MONTO QUE SE PRESTO
+      PAGO INTERES : INTERES(SACARLE EL PORCENTAJE) * CAPITAL
+      VALOR : DEPENDE DE LA CATIDAD DEL CLIENTE ( EJ: 4000  )
+      PAGO CAPITAL : VALOR DE LA CUOTA - PAGO INTERES  
+      CAPITAL FINAL : MONTO - PAGO CAPITAL
+
+      
+      */ 
 
 
       //se multiplica el monto por el interes
@@ -184,20 +287,24 @@ export class PrestamoService {
       let porcentaje = Math.round(montoXinteres / 100);
       // se saca el valor de cada cuota
       let valorCuota = cantidadCuotas * porcentaje;
+      console.log(valorCuota)
       let totalPago = Math.round(montoPrestamo + valorCuota);
-      valorCuota = Math.round(totalPago / cantidadCuotas);
+      console.log(totalPago)
+      valorCuota = totalPago / cantidadCuotas
+      console.log(valorCuota)
       prestamoForm.get('ValorCuotas').patchValue(valorCuota);
       prestamoForm.get('TotalPago').patchValue(totalPago);
-
-
-
     })
 
   }
 
+  saveCuotas(){
+
+  }
+
+
+
   setValidateCampos(prestamoForm: FormGroup) {
-
-
 
     prestamoForm.get('InteresGenerar').valueChanges.subscribe((interes) => {
       if (interes) {
@@ -207,40 +314,25 @@ export class PrestamoService {
         prestamoForm.get('CantidadCuotas').setValue(null);
         prestamoForm.get('CantidadCuotas').disable();
 
-        prestamoForm.get('TiempoPagar').setValue(null);
-        prestamoForm.get('TiempoPagar').disable();
+        prestamoForm.get('frecuenciaPago').setValue(null);
+        prestamoForm.get('frecuenciaPago').disable();
       }
 
     })
 
     prestamoForm.get('Monto').valueChanges.subscribe((monto) => {
       if (monto) {
-        prestamoForm.get('TiempoPagar').setValue(null);
-        prestamoForm.get('TiempoPagar').enable();
+        prestamoForm.get('frecuenciaPago').setValue(null);
+        prestamoForm.get('frecuenciaPago').enable();
       }
     })
 
-    prestamoForm.get('TiempoPagar').valueChanges.subscribe((data) => {
+    prestamoForm.get('frecuenciaPago').valueChanges.subscribe((data) => {
       if (data) {
         prestamoForm.get('CantidadCuotas').setValue(null);
         prestamoForm.get('CantidadCuotas').enable();
       }
     })
-
-
-
-
-
-
-    // prestamoForm.get('Monto').valueChanges.subscribe((monto)=>{
-    //   if(!monto){
-    //     prestamoForm.get('ValorCuotas').setValue(null);
-    //     prestamoForm.get('TotalPago').setValue(null);
-    //     prestamoForm.get('CantidadCuotas').setValue(null);
-    //   }
-    // })
-
-
 
   }
 
@@ -248,7 +340,7 @@ export class PrestamoService {
   setDisabled(prestamoForm: FormGroup) {
     prestamoForm.get('Monto').disable();
     prestamoForm.get('CantidadCuotas').disable();
-    prestamoForm.get('TiempoPagar').disable();
+    prestamoForm.get('frecuenciaPago').disable();
 
   }
 

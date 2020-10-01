@@ -28,5 +28,9 @@
         <td>@twitter</td>
       </tr>
     </tbody>
+
+    {{fechaJs | date:'shortDate'}}
+
+    {{fechaJs | amLocal | amDateFormat: 'll'}}
   </table>
   

@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { take } from 'rxjs/operators';
 import { BasedatosService } from './basedatos.service';
+import { FormsBuilderService } from './forms-builder.service';
+import { ToastMessage } from './toastmessages.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,9 +13,12 @@ export class ClienteService {
   //atributos
   cliente = new BehaviorSubject([]);
   clienteCedula = new BehaviorSubject([]);
+  clienteReadOnly;
 
   constructor(
-    public baseDatosService: BasedatosService
+    public baseDatosService: BasedatosService,
+    public formBuilderService : FormsBuilderService,
+    public toastService : ToastMessage
   ) { }
 
   getClienteById(Id: number) {
@@ -55,7 +60,7 @@ export class ClienteService {
   }
 
   getClienteCedula() {
-    return this.clienteCedula.asObservable().pipe(take(1));
+    return this.clienteCedula.asObservable();
   }
 
 
@@ -89,11 +94,12 @@ export class ClienteService {
 
         this.clienteCedula.next(items)
 
+      }).then(() => {
+       // this.getDataPersonReadOnly();
       }).catch((err) => {
         console.log("error al obtener cleinte bt cedula" + JSON.stringify(err));
       })
   }
-
 
 
 }

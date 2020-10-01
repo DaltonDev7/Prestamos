@@ -12,7 +12,7 @@
                 <div class="col-sm-12 col-md-6 col-lg-4">
                     <div class="form-group">
                         <label for="">Cedula Cliente</label>
-                        <input type="text" class="form-control" mask="000-0000000-0" formControlName="Cedula"
+                        <input type="text" class="form-control" mask="000-0000000-0" formControlName="CedulaCliente"
                             upperCase>
                     </div>
                 </div>
@@ -87,16 +87,16 @@
                 <div class="col-sm-12 col-md-6 col-lg-4">
                     <div class="form-group">
                         <label for="">Monto Prestamo</label>
-                        <input type="number" class="form-control" formControlName="Monto" upperCase>
+                        <input type="text" class="form-control" formControlName="Monto" mask="separator.2" thousandSeparator="," upperCase>
                     </div>
                 </div>
 
 
                 <div class="col-sm-12 col-md-6 col-lg-4">
                     <div class="form-group">
-                        <label for="">Tiempo Pagar</label>
+                        <label for="">Frecuencia Pago</label>
                         <ng-select bindLabel="text" bindValue="id" upperCase placeholder="Seleccione"
-                            [items]="tiempoPagarCombox" formControlName="TiempoPagar">
+                            [items]="frecuenciaPagoCombox" formControlName="frecuenciaPago">
                         </ng-select>
                     </div>
                 </div>

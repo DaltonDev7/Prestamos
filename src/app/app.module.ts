@@ -22,7 +22,7 @@ import { fab } from '@fortawesome/free-brands-svg-icons'
 import { HeaderComponent } from './shared/header/header.component';
 import { CommonModule } from '@angular/common';
 
-
+import 'moment/locale/es';
 @NgModule({
   declarations: [
     AppComponent,

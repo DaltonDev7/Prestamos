@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Injectable({
     providedIn: 'root'
 })
 export class FormsBuilderService {
+
+    //atributos
+    editFormsReadOnly: FormGroup;
 
     constructor(
         public fb : FormBuilder
@@ -37,7 +40,7 @@ export class FormsBuilderService {
             'Tipo':[null,[Validators.required]],
             'Fecha':[null],
             'Monto':[null,[Validators.required]],
-            'TiempoPagar':[null,[Validators.required]],
+            'frecuenciaPago':[null,[Validators.required]],
             'CantidadCuotas':[null,[Validators.required]],
             'ValorCuotas':[{ value: null, disabled: true }],
             'TotalPago':[{ value: null, disabled: true }],
@@ -60,7 +63,7 @@ export class FormsBuilderService {
     getAddClientePrestamoBuilder(){
         return this.fb.group({
             ...this.getClientePrestamo().controls,
-            'Cedula':[null,[Validators.required]]
+            'CedulaCliente':[null,[Validators.required]]
         })
     }
 
