@@ -38,14 +38,17 @@ export class FormsBuilderService {
         return this.fb.group({
             'IdCliente':[null],
             'Tipo':[null,[Validators.required]],
-            'Fecha':[null],
             'Monto':[null,[Validators.required]],
-            'frecuenciaPago':[null,[Validators.required]],
-            'CantidadCuotas':[null,[Validators.required]],
+            'FrecuenciaPago':[{ value: null, disabled: true }],
+            'InteresGenerar':[{ value: null, disabled: true }],
+            'CantidadCuotas':[{ value: null, disabled: true }],
             'ValorCuotas':[{ value: null, disabled: true }],
+            'MontoInteres':[{ value: null, disabled: true }],
             'TotalPago':[{ value: null, disabled: true }],
-            'InteresGenerar':[null,[Validators.required]],
-            'EstadoPrestamo':[null,[Validators.required]]
+            'PagoCapital':[{ value: null, disabled: true }],
+            'PagoInteres':[{ value: null, disabled: true }],
+            'EstadoPrestamo':[null,[Validators.required]],
+            'FechaCreacionPrestamo':[null,[Validators.required]]
         })
     }
 

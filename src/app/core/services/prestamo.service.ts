@@ -5,6 +5,7 @@ import { take } from 'rxjs/operators';
 import { Cuota } from '../interfaces/cuota';
 import { Prestamo } from '../interfaces/prestamo';
 import { BasedatosService } from './basedatos.service';
+import { ValidatorFormsService } from './validator-forms.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,8 @@ export class PrestamoService {
   lastPrestamo = new BehaviorSubject([]);
 
   constructor(
-    public baseDatosService: BasedatosService
+    public baseDatosService: BasedatosService,
+    public validatorService : ValidatorFormsService
   ) { }
 
 
@@ -26,7 +28,6 @@ export class PrestamoService {
     cliente.Nombres , 
     cliente.Apellidos , 
     prestamo.Monto, 
-    prestamo.Fecha, 
     prestamo.Id, 
     prestamo.EstadoPrestamo,
     prestamo.FechaCreacionPrestamo
@@ -89,13 +90,15 @@ export class PrestamoService {
     let data = [
       prestamo.IdCliente,
       prestamo.Tipo,
-      prestamo.Fecha,
-      prestamo.Hora,
       prestamo.Monto,
+      prestamo.FrecuenciaPago,
+      prestamo.InteresGenerar,
       prestamo.CantidadCuotas,
       prestamo.ValorCuotas,
+      prestamo.MontoInteres,
       prestamo.TotalPago,
-      prestamo.InteresGenerar,
+      prestamo.PagoCapital,
+      prestamo.PagoInteres,
       prestamo.EstadoPrestamo,
       FechaCreacionPrestamo
     ]
@@ -103,10 +106,21 @@ export class PrestamoService {
     let cuota:Cuota[] = [
      
     ]
-
-    return this.baseDatosService.database.executeSql(`INSERT INTO prestamo 
-    (IdCliente, Tipo, Fecha, Hora,Monto,CantidadCuotas,ValorCuotas,TotalPago,InteresGenerar,EstadoPrestamo,
-      FechaCreacionPrestamo) VALUES (?,?,?,?,?,?,?,?,?,?,?)`, data).then(res => {
+    let query = `INSERT INTO prestamo 
+    ( IdCliente, 
+      Tipo,
+      Monto,
+      FrecuenciaPago,
+      InteresGenerar,
+      CantidadCuotas,
+      ValorCuotas,
+      MontoInteres,
+      TotalPago,
+      PagoCapital,
+      PagoInteres,
+      EstadoPrestamo,
+      FechaCreacionPrestamo) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+    return this.baseDatosService.database.executeSql(query, data).then(res => {
         console.log("respuesta" + JSON.stringify(res))
       this.loadPrestamo();
     }).catch((err)=>{
@@ -306,41 +320,53 @@ export class PrestamoService {
 
   setValidateCampos(prestamoForm: FormGroup) {
 
+
+    prestamoForm.get('Monto').valueChanges.subscribe((data) => {
+      if (data) {
+        let frecuenciaPago = prestamoForm.get('FrecuenciaPago')
+        this.validatorService.setEnableControlsRequired([frecuenciaPago]);
+     //   this.validatorService.requiredControls(prestamoForm, ['FrecuenciaPago']);
+      }else{
+        let frecuenciaPago = prestamoForm.get('FrecuenciaPago')
+        let interes = prestamoForm.get('InteresGenerar');
+        let cantidaCuota = prestamoForm.get('CantidadCuotas');
+        this.validatorService.setDisabledControls([frecuenciaPago,interes,cantidaCuota])
+      }
+    })
+
+    prestamoForm.get('FrecuenciaPago').valueChanges.subscribe((data)=>{
+      if(data){
+        let interes = prestamoForm.get('InteresGenerar');
+        this.validatorService.setEnableControlsRequired([interes]);
+
+        let cantidaCuota = prestamoForm.get('CantidadCuotas');
+        this.validatorService.setDisabledControls([cantidaCuota])
+      }
+    })
+
     prestamoForm.get('InteresGenerar').valueChanges.subscribe((interes) => {
       if (interes) {
-        prestamoForm.get('Monto').enable();
-        prestamoForm.get('Monto').setValue(null);
-
-        prestamoForm.get('CantidadCuotas').setValue(null);
-        prestamoForm.get('CantidadCuotas').disable();
-
-        prestamoForm.get('frecuenciaPago').setValue(null);
-        prestamoForm.get('frecuenciaPago').disable();
+        let cantidaCuota = prestamoForm.get('CantidadCuotas');
+        this.validatorService.setEnableControlsRequired([cantidaCuota]);
       }
 
     })
 
-    prestamoForm.get('Monto').valueChanges.subscribe((monto) => {
-      if (monto) {
-        prestamoForm.get('frecuenciaPago').setValue(null);
-        prestamoForm.get('frecuenciaPago').enable();
-      }
-    })
+    // prestamoForm.get('Monto').valueChanges.subscribe((monto) => {
+    //   if (monto) {
+    //     prestamoForm.get('FrecuenciaPago').setValue(null);
+    //     prestamoForm.get('FrecuenciaPago').enable();
+    //   }
+    // })
 
-    prestamoForm.get('frecuenciaPago').valueChanges.subscribe((data) => {
-      if (data) {
-        prestamoForm.get('CantidadCuotas').setValue(null);
-        prestamoForm.get('CantidadCuotas').enable();
-      }
-    })
 
   }
 
 
   setDisabled(prestamoForm: FormGroup) {
-    prestamoForm.get('Monto').disable();
+   /* prestamoForm.get('Monto').disable();
     prestamoForm.get('CantidadCuotas').disable();
-    prestamoForm.get('frecuenciaPago').disable();
+    prestamoForm.get('FrecuenciaPago').disable();*/
 
   }
 

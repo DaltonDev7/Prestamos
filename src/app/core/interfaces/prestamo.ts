@@ -2,6 +2,10 @@
 export interface Prestamo{
     Id?:number; 
     IdCliente?:number;
+    FrecuenciaPago:number;
+    MontoInteres:number;
+    PagoCapital:number;
+    PagoInteres:number;
     Tipo?:number;
     Fecha?:string;
     Hora?:string; 
@@ -11,5 +15,5 @@ export interface Prestamo{
     TotalPago?:number;
     InteresGenerar?:number;
     EstadoPrestamo?:string;
-    FechaCreacion?:string;
+    FechaCreacionPrestamo?:string;
 }
