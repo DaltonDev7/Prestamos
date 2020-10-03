@@ -18,7 +18,7 @@ export class PrestamoService {
 
   constructor(
     public baseDatosService: BasedatosService,
-    public validatorService : ValidatorFormsService
+    public validatorService: ValidatorFormsService
   ) { }
 
 
@@ -55,25 +55,25 @@ export class PrestamoService {
     })
   }
 
-  
-  obtenerUltimoPrestamo(){
-    return this.baseDatosService.database.executeSql(`select top 1 * from prestamo ORDER BY Id DESC`,[])
-    .then((res)=>{
-      let items:any = [];
-      if (res.rows.length > 0) {
-        for (var i = 0; i < res.rows.length; i++) {
-          items.push({
-            Id: res.rows.item(i).Id,
-            Tipo: res.rows.item(i).Tipo,
-            Monto: res.rows.item(i).Monto,
-            CantidadCuotas: res.rows.item(i).CantidadCuotas
-          });
+
+  obtenerUltimoPrestamo() {
+    return this.baseDatosService.database.executeSql(`select top 1 * from prestamo ORDER BY Id DESC`, [])
+      .then((res) => {
+        let items: any = [];
+        if (res.rows.length > 0) {
+          for (var i = 0; i < res.rows.length; i++) {
+            items.push({
+              Id: res.rows.item(i).Id,
+              Tipo: res.rows.item(i).Tipo,
+              Monto: res.rows.item(i).Monto,
+              CantidadCuotas: res.rows.item(i).CantidadCuotas
+            });
+          }
         }
-      }
-      this.lastPrestamo.next(items)
-    }).catch((err) => {
-      console.log("error al obtener el ultimo prestamo" + JSON.stringify(err))
-    })
+        this.lastPrestamo.next(items)
+      }).catch((err) => {
+        console.log("error al obtener el ultimo prestamo" + JSON.stringify(err))
+      })
   }
 
   getPrestamos() {
@@ -103,8 +103,8 @@ export class PrestamoService {
       FechaCreacionPrestamo
     ]
 
-    let cuota:Cuota[] = [
-     
+    let cuota: Cuota[] = [
+
     ]
     let query = `INSERT INTO prestamo 
     ( IdCliente, 
@@ -121,9 +121,9 @@ export class PrestamoService {
       EstadoPrestamo,
       FechaCreacionPrestamo) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`;
     return this.baseDatosService.database.executeSql(query, data).then(res => {
-        console.log("respuesta" + JSON.stringify(res))
+      console.log("respuesta" + JSON.stringify(res))
       this.loadPrestamo();
-    }).catch((err)=>{
+    }).catch((err) => {
       console.log("errror en el prestamo service")
     });
 
@@ -216,36 +216,41 @@ export class PrestamoService {
 
   calcularCuota(prestamoForm: FormGroup) {
 
-    /*
-    tipo prestamo
-    monto
-    frecuencia
-
-    interes = 40
-    
-    */
-
-    /*
-      interes
-
-
-
-      diario = interes / 30.5 
-      semanal = interes / 4
-      quincenal = interes / 2
-      mensual  = interes / 1
-
-    */
-
-
     prestamoForm.get('CantidadCuotas').valueChanges.subscribe((cantidadCuotas) => {
-      let montoPrestamo = parseInt(prestamoForm.get('Monto').value)
-      let interes = prestamoForm.get('InteresGenerar').value;
-      let frecuenciaPago = prestamoForm.get('frecuenciaPago').value;
+      if (cantidadCuotas) {
 
-      interes = interes / frecuenciaPago;
-      console.log(interes)
-      console.log(montoPrestamo)
+        let montoPrestamo = parseInt(prestamoForm.get('Monto').value)
+        let interes = prestamoForm.get('InteresGenerar').value;
+        let frecuenciaPago = prestamoForm.get('FrecuenciaPago').value;
+
+        //CALCULANDO MONOTO INTERES
+        let montoInteres = montoPrestamo * interes;
+        montoInteres = montoInteres / 100;
+        montoInteres = montoInteres * cantidadCuotas
+        console.log(montoInteres)
+        prestamoForm.get('MontoInteres').patchValue(montoInteres);
+
+        //CALCULANDO PAGO TOTAL
+        let pagoTotal = montoInteres + montoPrestamo
+        prestamoForm.get('TotalPago').patchValue(pagoTotal)
+
+        //CACULANDO VALOR CUOTA
+        let valorCuota = pagoTotal / cantidadCuotas
+        prestamoForm.get('ValorCuotas').patchValue(valorCuota)
+
+        //CALCULANDO PAGO CAPITAL
+        let pagoCapital = montoPrestamo / cantidadCuotas
+        prestamoForm.get('PagoCapital').patchValue(pagoCapital);
+
+        //CALCULANDO PAGO INTERES
+        let pagoInteres = interes * montoPrestamo
+        pagoInteres = pagoInteres / 100;
+        prestamoForm.get('PagoInteres').patchValue(pagoInteres);
+
+
+
+      }
+
 
       /*
       interes
@@ -292,27 +297,27 @@ export class PrestamoService {
       CAPITAL FINAL : MONTO - PAGO CAPITAL
 
       
-      */ 
+      */
 
 
-      //se multiplica el monto por el interes
-      let montoXinteres = montoPrestamo * interes;
-      //luego se divide entre 100 para sacar el porcentaje
-      let porcentaje = Math.round(montoXinteres / 100);
-      // se saca el valor de cada cuota
-      let valorCuota = cantidadCuotas * porcentaje;
-      console.log(valorCuota)
-      let totalPago = Math.round(montoPrestamo + valorCuota);
-      console.log(totalPago)
-      valorCuota = totalPago / cantidadCuotas
-      console.log(valorCuota)
-      prestamoForm.get('ValorCuotas').patchValue(valorCuota);
-      prestamoForm.get('TotalPago').patchValue(totalPago);
+      // se multiplica el monto por el interes
+      // let montoXinteres = montoPrestamo * interes;
+      // //luego se divide entre 100 para sacar el porcentaje
+      // let porcentaje = Math.round(montoXinteres / 100);
+      // // se saca el valor de cada cuota
+      // let valorCuota = cantidadCuotas * porcentaje;
+      // console.log(valorCuota)
+      // let totalPago = Math.round(montoPrestamo + valorCuota);
+      // console.log(totalPago)
+      // valorCuota = totalPago / cantidadCuotas
+      // console.log(valorCuota)
+      // prestamoForm.get('ValorCuotas').patchValue(valorCuota);
+      // prestamoForm.get('TotalPago').patchValue(totalPago);
     })
 
   }
 
-  saveCuotas(){
+  saveCuotas() {
 
   }
 
@@ -320,54 +325,108 @@ export class PrestamoService {
 
   setValidateCampos(prestamoForm: FormGroup) {
 
-
-    prestamoForm.get('Monto').valueChanges.subscribe((data) => {
+    prestamoForm.get('Tipo').valueChanges.subscribe((data) => {
       if (data) {
-        let frecuenciaPago = prestamoForm.get('FrecuenciaPago')
-        this.validatorService.setEnableControlsRequired([frecuenciaPago]);
-     //   this.validatorService.requiredControls(prestamoForm, ['FrecuenciaPago']);
-      }else{
-        let frecuenciaPago = prestamoForm.get('FrecuenciaPago')
-        let interes = prestamoForm.get('InteresGenerar');
-        let cantidaCuota = prestamoForm.get('CantidadCuotas');
-        this.validatorService.setDisabledControls([frecuenciaPago,interes,cantidaCuota])
+        console.log(data)
+        let monto = prestamoForm.get('Monto');
+        this.validatorService.setEnableControlsRequired([monto]);
+        this.setAllCamposPrestamosNull(prestamoForm)
+      } else {
+        this.setAllCamposPrestamosNull(prestamoForm)
       }
     })
 
-    prestamoForm.get('FrecuenciaPago').valueChanges.subscribe((data)=>{
-      if(data){
-        let interes = prestamoForm.get('InteresGenerar');
-        this.validatorService.setEnableControlsRequired([interes]);
 
+    prestamoForm.get('Monto').valueChanges.subscribe((data) => {
+
+      if (data) {
+        let tipo = prestamoForm.get('Tipo').value;
+        if (tipo == 1) {
+          let frecuenciaPago = prestamoForm.get('FrecuenciaPago')
+          this.validatorService.setEnableControlsRequired([frecuenciaPago]);
+        }
+        if (tipo == 2) {
+          let interes = prestamoForm.get('InteresGenerar');
+          this.validatorService.setEnableControlsRequired([interes]);
+        }
+
+      } else {
+        let frecuenciaPago = prestamoForm.get('FrecuenciaPago')
+        let interes = prestamoForm.get('InteresGenerar');
+        let cantidaCuota = prestamoForm.get('CantidadCuotas');
+        this.validatorService.setDisabledControls([frecuenciaPago, interes, cantidaCuota])
+      }
+
+
+
+
+    })
+
+    prestamoForm.get('InteresGenerar').valueChanges.subscribe((interes) => {
+      if (interes) {
+        let tipo = prestamoForm.get('Tipo').value;
+        if (tipo == 1) {
+          console.log(interes)
+          let cantidaCuota = prestamoForm.get('CantidadCuotas');
+          this.validatorService.setEnableControlsRequired([cantidaCuota]);
+        }
+        if (tipo == 2) {
+
+          let montoPrestamo = prestamoForm.get('Monto').value
+          let pagoInteres = interes * montoPrestamo
+          pagoInteres = pagoInteres / 100;
+          prestamoForm.get('PagoInteres').patchValue(pagoInteres);
+        }
+
+      }
+    })
+
+  }
+
+
+  calcularinteres(prestamoForm: FormGroup) {
+    //  interes = 40
+    /*
+      diario = interes / 30.5 
+      semanal = interes / 4
+      quincenal = interes / 2
+      mensual  = interes / 1
+
+    */
+    prestamoForm.get('FrecuenciaPago').valueChanges.subscribe((frecuenciaPago) => {
+      if (frecuenciaPago) {
+
+        const interes = 40;
+        let interesFormat = interes / frecuenciaPago;
+        interesFormat = Math.round(interesFormat * 100) / 100;
+
+        prestamoForm.get('InteresGenerar').enable();
+        prestamoForm.get('InteresGenerar').patchValue(interesFormat);
+
+        let cantidaCuota = prestamoForm.get('CantidadCuotas');
+        this.validatorService.setEnableControlsRequired([cantidaCuota]);
+      } else {
         let cantidaCuota = prestamoForm.get('CantidadCuotas');
         this.validatorService.setDisabledControls([cantidaCuota])
       }
     })
 
-    prestamoForm.get('InteresGenerar').valueChanges.subscribe((interes) => {
-      if (interes) {
-        let cantidaCuota = prestamoForm.get('CantidadCuotas');
-        this.validatorService.setEnableControlsRequired([cantidaCuota]);
-      }
-
-    })
-
-    // prestamoForm.get('Monto').valueChanges.subscribe((monto) => {
-    //   if (monto) {
-    //     prestamoForm.get('FrecuenciaPago').setValue(null);
-    //     prestamoForm.get('FrecuenciaPago').enable();
-    //   }
-    // })
-
-
   }
 
+  setAllCamposPrestamosNull(prestamoForm: FormGroup) {
+    let frecuenciaPago = prestamoForm.get('FrecuenciaPago');
+    let interes = prestamoForm.get('InteresGenerar');
+    let cantidaCuota = prestamoForm.get('CantidadCuotas');
+    // let monto = prestamoForm.get('Monto');
+    let valorCuota = prestamoForm.get('ValorCuotas');
+    let montoInteres = prestamoForm.get('MontoInteres');
+    let totalPago = prestamoForm.get('TotalPago');
+    let pagoCapital = prestamoForm.get('PagoCapital');
+    let pagoInteres = prestamoForm.get('PagoInteres');
 
-  setDisabled(prestamoForm: FormGroup) {
-   /* prestamoForm.get('Monto').disable();
-    prestamoForm.get('CantidadCuotas').disable();
-    prestamoForm.get('FrecuenciaPago').disable();*/
-
+    this.validatorService.setDisabledControls(
+      [frecuenciaPago, interes, cantidaCuota,
+        valorCuota, montoInteres, totalPago, pagoCapital, pagoInteres])
   }
 
 

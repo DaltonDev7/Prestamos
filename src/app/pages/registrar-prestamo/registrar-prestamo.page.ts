@@ -22,7 +22,7 @@ export class RegistrarPrestamoPage implements OnInit {
   cedula;
 
   estadoCombox: Combox[];
-  tipoPrestamo: Combox[];
+  tipoPrestamo: any[];
   frecuenciaPagoCombox: any[];
 
   mensaje = 'este cedula no existe'
@@ -38,6 +38,8 @@ export class RegistrarPrestamoPage implements OnInit {
   ngOnInit() {
     this.prestamoForm = this.formBuilderServices.getPrestamoForm();
     this.clienteForm = this.formBuilderServices.getAddClientePrestamoBuilder();
+
+    this. prestamoForm.get('InteresGenerar').disable();
 
     this.estadoCombox = this.comboxService.EstadoCombox;
     this.tipoPrestamo = this.comboxService.tipoPrestamo;
@@ -57,10 +59,7 @@ export class RegistrarPrestamoPage implements OnInit {
       this.cliente = this.clienteService.clienteReadOnly;
     }
 
-    this.prestamoService.setDisabled(this.prestamoForm);
-
-   
-
+    this.prestamoService.calcularinteres(this.prestamoForm);
     this.prestamoService.setValidateCampos(this.prestamoForm)
     this.prestamoService.calcularCuota(this.prestamoForm)
 

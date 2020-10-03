@@ -38,9 +38,9 @@ export class FormsBuilderService {
         return this.fb.group({
             'IdCliente':[null],
             'Tipo':[null,[Validators.required]],
-            'Monto':[null,[Validators.required]],
+            'Monto':[{ value: null, disabled: true }],
             'FrecuenciaPago':[{ value: null, disabled: true }],
-            'InteresGenerar':[{ value: null, disabled: true }],
+            'InteresGenerar':[null,[Validators.required]],
             'CantidadCuotas':[{ value: null, disabled: true }],
             'ValorCuotas':[{ value: null, disabled: true }],
             'MontoInteres':[{ value: null, disabled: true }],
