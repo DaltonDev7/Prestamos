@@ -31,8 +31,13 @@
 //ng select
 @import "~@ng-select/ng-select/themes/default.theme.css";
 
-input.ng-invalid {
+input.ng-invalid  {
     border: 1px solid #f00 !important;
+}
+
+.txt-area{
+    min-height: 90px;
+    max-height: 100px;
 }
 
 ng-select.ng-invalid .ng-select-container {

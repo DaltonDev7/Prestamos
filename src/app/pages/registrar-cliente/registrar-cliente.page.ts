@@ -7,6 +7,9 @@ import { Combox } from 'src/app/core/interfaces/combox';
 import { ComboxService } from 'src/app/core/services/combox.service';
 import { ToastController } from '@ionic/angular';
 import { ToastMessage } from 'src/app/core/services/toastmessages.service';
+import { Cliente } from 'src/app/core/interfaces/cliente';
+import { ClienteService } from 'src/app/core/services/cliente.service';
+import { ValidatorFormsService } from 'src/app/core/services/validator-forms.service';
 
 
 @Component({
@@ -23,6 +26,7 @@ export class RegistrarClientePage implements OnInit {
   sexoCombox: Combox[];
   bancoCombox: Combox[];
   estadoCombox: Combox[];
+  cliente:Cliente;
   listCliente;
   permiso1 = false;
   permiso2 = false;
@@ -34,7 +38,9 @@ export class RegistrarClientePage implements OnInit {
     public baseDatosService: BasedatosService,
     public comboxServices: ComboxService,
     public toastController: ToastController,
-    public toasMessageService: ToastMessage
+    public toasMessageService: ToastMessage,
+    public clienteServices : ClienteService,
+    public validatorServices : ValidatorFormsService
   ) { }
 
   ngOnInit() {
@@ -52,7 +58,15 @@ export class RegistrarClientePage implements OnInit {
       }
     })
 
-    this.cedulaId = document.getElementById('cedula-id');
+    this.clienteForm.get('Cedula').valueChanges.subscribe((data)=>{
+      if(data.length == 11){
+        this.clienteServices.getClienteByCedula(data).then(()=>{
+
+        })
+      }
+    })
+
+
 
   
 
@@ -106,6 +120,18 @@ export class RegistrarClientePage implements OnInit {
       Cedula: cedula
     }
     this.clienteForm.patchValue(data);
+  }
+
+  validateCliente(){
+    this.clienteServices.getClienteCedula().subscribe((cliente)=>{
+      console.log("obteniedo datos " + JSON.stringify(cliente))
+      if(cliente[0]){
+        this.toasMessageService.cedulaExist();
+        this.validatorServices.disabledAllControls(this.clienteForm , ['Cedula'])
+      }else{
+        this.validatorServices.enableAllControls(this.clienteForm );
+      }
+    })
   }
 
 

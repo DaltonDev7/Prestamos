@@ -94,7 +94,8 @@ export class RegistrarPrestamoPage implements OnInit {
     } else {
       this.prestamoForm.patchValue({ 'IdCliente': this.cliente.Id });
       console.log(this.prestamoForm.value)
-      this.prestamoService.addPrestamo(this.prestamoForm.value).then((data) => {
+      console.log(this.prestamoForm.getRawValue())
+      this.prestamoService.addPrestamo(this.prestamoForm.getRawValue()).then((data) => {
         this.prestamoForm.reset();
         this.toastService.showMessagePrestamoSaved();
       }).catch((err) => {

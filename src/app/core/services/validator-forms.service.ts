@@ -46,6 +46,22 @@ export class ValidatorFormsService {
         }
     }
 
+     disabledAllControls(form : FormGroup, exepciones : string[] = []){
+        for(let key in form.controls) {
+            if(!exepciones.find((campo) => campo == key)){
+                form.get(key).disable();
+            }
+        }
+    }
+
+    enableAllControls(form : FormGroup, exepciones : string[] = []){
+        for(let key in form.controls) {
+            if(!exepciones.find((campo) => campo == key)){
+                form.get(key).enable();
+            }
+        }
+    }
+
 
 
 

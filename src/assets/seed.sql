@@ -26,7 +26,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS index_cedula ON cliente(Cedula);
 CREATE TABLE IF NOT EXISTS prestamo(
      Id INTEGER PRIMARY KEY AUTOINCREMENT,
      IdCliente INTEGER,
-     Tipo TEXT NULL,
+     Tipo INTEGER NULL,
      Monto DECIMAL NULL,
      FrecuenciaPago INTEGER NULL,
      InteresGenerar DECIMAL NULL,

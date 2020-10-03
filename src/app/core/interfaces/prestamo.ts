@@ -2,10 +2,10 @@
 export interface Prestamo{
     Id?:number; 
     IdCliente?:number;
-    FrecuenciaPago:number;
-    MontoInteres:number;
-    PagoCapital:number;
-    PagoInteres:number;
+    FrecuenciaPago?:number;
+    MontoInteres?:number;
+    PagoCapital?:number;
+    PagoInteres?:number;
     Tipo?:number;
     Fecha?:string;
     Hora?:string; 

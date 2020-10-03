@@ -22,7 +22,7 @@ export class FormsBuilderService {
             'FechaNacimiento':[null,[Validators.required]],
             'Foto':[null],
             'Sexo':[null,[Validators.required]],
-            'Direccion':[null,[Validators.required]],
+            'Direccion':[null],
             'Celular':[null,[Validators.required,Validators.minLength(10)]],
             'Ocupacion':[null,[Validators.required]],
             'Estado':[null,[Validators.required]],
@@ -48,7 +48,7 @@ export class FormsBuilderService {
             'PagoCapital':[{ value: null, disabled: true }],
             'PagoInteres':[{ value: null, disabled: true }],
             'EstadoPrestamo':[null,[Validators.required]],
-            'FechaCreacionPrestamo':[null,[Validators.required]]
+            'FechaCreacionPrestamo':[null]
         })
     }
 

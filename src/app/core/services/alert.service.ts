@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
+import { PrestamoService } from './prestamo.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,8 @@ export class AlertService {
 
   constructor(
     public router: Router,
-    public alertController: AlertController
+    public alertController: AlertController,
+    private prestamoService : PrestamoService
   ) { }
 
 
@@ -66,6 +68,8 @@ export class AlertService {
     await alert.present();
 
   }
+
+  
 
 
 

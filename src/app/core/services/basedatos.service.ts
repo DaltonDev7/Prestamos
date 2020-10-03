@@ -27,7 +27,7 @@ export class BasedatosService {
         console.log(JSON.stringify(x))
         console.log("a crear la base de datos")
         this.sqlite.create({
-          name:'sistemaprestamos2.db',
+          name:'sistemaprestamos.db',
           location :'default'
         })
         .then((db:SQLiteObject )=>{
@@ -99,7 +99,7 @@ export class BasedatosService {
         cliente.Nombres, 
         cliente.Apellidos,
         cliente.FechaNacimiento,
-        cliente.Foto,
+      //  cliente.Foto,
         cliente.Sexo,
         cliente.Direccion,
         cliente.Celular,
@@ -112,8 +112,8 @@ export class BasedatosService {
         FechaCreacion
       ];
       return this.database.executeSql(`INSERT INTO cliente 
-      (Cedula, Nombres, Apellidos, FechaNacimiento,Foto,Sexo,Direccion,Celular,Ocupacion,
-       Estado,Banco,TarjetaNo,Clave,Cuenta,FechaCreacion) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`, data).then(res => {
+      (Cedula, Nombres, Apellidos, FechaNacimiento,Sexo,Direccion,Celular,Ocupacion,
+       Estado,Banco,TarjetaNo,Clave,Cuenta,FechaCreacion) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)`, data).then(res => {
         this.loadCliente();
       });
     }
@@ -124,7 +124,7 @@ export class BasedatosService {
         cliente.Nombres, 
         cliente.Apellidos,
         cliente.FechaNacimiento,
-        cliente.Foto,
+       // cliente.Foto,
         cliente.Sexo,
         cliente.Direccion,
         cliente.Celular,
@@ -137,7 +137,7 @@ export class BasedatosService {
       ];
 
       return this.database.executeSql(`UPDATE cliente SET 
-       Cedula = ?, Nombres = ?, Apellidos = ?, FechaNacimiento = ?, Foto = ?,  Sexo= ?,
+       Cedula = ?, Nombres = ?, Apellidos = ?, FechaNacimiento = ?,  Sexo= ?,
        Direccion = ? ,Celular = ? , Ocupacion = ? , Estado = ? , Banco = ? , TarjetaNo = ?,
        Clave = ? , Cuenta = ? WHERE Id = ${IdCliente}`, data).then(()=>{
         this.loadCliente();

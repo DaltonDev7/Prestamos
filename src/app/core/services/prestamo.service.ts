@@ -135,16 +135,20 @@ export class PrestamoService {
     let data = [
       prestamo.Tipo,
       prestamo.Monto,
+      prestamo.FrecuenciaPago,
       prestamo.CantidadCuotas,
       prestamo.ValorCuotas,
+      prestamo.MontoInteres,
       prestamo.TotalPago,
+      prestamo.PagoCapital,
+      prestamo.PagoInteres,
       prestamo.InteresGenerar,
       prestamo.EstadoPrestamo
     ]
 
     let query = `
-    update prestamo set Tipo = ?, Monto = ? , CantidadCuotas = ? , ValorCuotas = ?,
-    TotalPago = ? , InteresGenerar = ? , EstadoPrestamo = ? where Id = ${IdPrestamo}
+    update prestamo set Tipo = ?, Monto = ? , FrecuenciaPago = ?, CantidadCuotas = ? , ValorCuotas = ?, MontoInteres = ?,
+    TotalPago = ?, PagoCapital = ? , PagoInteres = ?, InteresGenerar = ? , EstadoPrestamo = ? where Id = ${IdPrestamo}
     `
 
     return this.baseDatosService.database.executeSql(query, data).then(() => {
@@ -165,13 +169,16 @@ export class PrestamoService {
     p.Id, 
     p.Tipo,
     p.Monto, 
+    p.FrecuenciaPago,
+    p.PagoInteres,
+    p.PagoCapital,
     p.CantidadCuotas,
     p.ValorCuotas,
     p.TotalPago,
     p.InteresGenerar,
+    p.MontoInteres,
     p.EstadoPrestamo,
-    p.FechaCreacionPrestamo,
-    p.Fecha
+    p.FechaCreacionPrestamo
     FROM prestamo p
     LEFT JOIN cliente c on c.Id = p.IdCliente 
     where p.Id = ${IdPrestamo}
@@ -184,13 +191,16 @@ export class PrestamoService {
             Id: res.rows.item(i).Id,
             Tipo: res.rows.item(i).Tipo,
             Monto: res.rows.item(i).Monto,
+            FrecuenciaPago: res.rows.item(i).FrecuenciaPago,
+            PagoInteres: res.rows.item(i).PagoInteres,
+            PagoCapital: res.rows.item(i).PagoCapital,
             CantidadCuotas: res.rows.item(i).CantidadCuotas,
             ValorCuotas: res.rows.item(i).ValorCuotas,
             TotalPago: res.rows.item(i).TotalPago,
             InteresGenerar: res.rows.item(i).InteresGenerar,
+            MontoInteres: res.rows.item(i).MontoInteres,
             EstadoPrestamo: res.rows.item(i).EstadoPrestamo,
             FechaCreacionPrestamo: res.rows.item(i).FechaCreacionPrestamo,
-            Fecha: res.rows.item(i).Fecha,
             Nombres: res.rows.item(i).Nombres,
             Apellidos: res.rows.item(i).Apellidos,
             Cedula: res.rows.item(i).Cedula,

@@ -7,13 +7,12 @@
         <h5>Datos del Cliente</h5>
         <form [formGroup]="clienteForm">
             <div class="row">
-               
+
 
                 <div class="col-sm-12 col-md-6 col-lg-4">
                     <div class="form-group">
                         <label for="">Cedula Cliente</label>
-                        <input type="text" class="form-control" mask="000-0000000-0" formControlName="Cedula"
-                            upperCase>
+                        <input type="text" class="form-control" mask="000-0000000-0" formControlName="Cedula" upperCase>
                     </div>
                 </div>
 
@@ -38,10 +37,10 @@
                     </div>
                 </div>
 
-                <div class="col-sm-12 col-md-6 col-lg-4">
+                <div class="col-sm-12 col-md-6 col-lg-8">
                     <div class="form-group">
                         <label for="">Direccion</label>
-                        <input type="text" class="form-control" formControlName="Direccion" upperCase>
+                        <textarea  class="form-control txt-area" formControlName="Direccion" upperCase> </textarea>
                     </div>
                 </div>
 
@@ -55,30 +54,40 @@
         </form>
     </div>
 
-    <div class="container"> 
+    <div class="container">
         <h5>Datos del Prestamo</h5>
 
         <form [formGroup]="prestamoForm">
             <div class="row">
-                
-                <div class="col-sm-12 col-md-6 col-lg-4">
-                    <div class="form-group">
-                        <label for="">Tipo Prestamo</label>
-                        <input type="text" class="form-control" formControlName="Tipo" upperCase>
-                    </div>
-                </div>
 
                 <div class="col-sm-12 col-md-6 col-lg-4">
                     <div class="form-group">
-                        <label for="">Fecha</label>
-                        <input type="text" class="form-control" formControlName="Fecha" upperCase>
+                        <label for="">Tipo Prestamo</label>
+                        <ng-select bindLabel="text" bindValue="id" upperCase placeholder="Seleccione"
+                            [items]="tipoPrestamo" formControlName="Tipo">
+                        </ng-select>
                     </div>
                 </div>
 
                 <div class="col-sm-12 col-md-6 col-lg-4">
                     <div class="form-group">
                         <label for="">Monto Prestamo</label>
-                        <input type="number" class="form-control" formControlName="Monto" upperCase>
+                        <input type="text" class="form-control" formControlName="Monto" mask="separator.2" thousandSeparator="," upperCase>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="">Frecuencia Pago</label>
+                        <ng-select bindLabel="text" bindValue="id" upperCase placeholder="Seleccione"
+                            [items]="frecuenciaPagoCombox" formControlName="FrecuenciaPago">
+                        </ng-select>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="">Interes</label>
+                        <input type="text" class="form-control" formControlName="InteresGenerar"  mask="percent" suffix="%"  upperCase>
                     </div>
                 </div>
 
@@ -92,21 +101,33 @@
                 <div class="col-sm-12 col-md-6 col-lg-4">
                     <div class="form-group">
                         <label for="">Valor Cuotas</label>
-                        <input type="number" class="form-control" formControlName="ValorCuotas" upperCase>
+                        <input type="text" class="form-control" formControlName="ValorCuotas" upperCase  mask="separator.2" thousandSeparator=",">
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="">MontoInteres</label>
+                        <input type="text" class="form-control" formControlName="MontoInteres" upperCase  mask="separator.2" thousandSeparator=",">
                     </div>
                 </div>
 
                 <div class="col-sm-12 col-md-6 col-lg-4">
                     <div class="form-group">
                         <label for="">Total Pago</label>
-                        <input type="number" class="form-control" formControlName="TotalPago" upperCase>
+                        <input type="text" class="form-control" formControlName="TotalPago" upperCase  mask="separator.2" thousandSeparator=",">
                     </div>
                 </div>
 
                 <div class="col-sm-12 col-md-6 col-lg-4">
                     <div class="form-group">
-                        <label for="">Interes</label>
-                        <input type="number" class="form-control" formControlName="InteresGenerar" upperCase>
+                        <label for="">Pago Capital</label>
+                        <input type="text" class="form-control" formControlName="PagoCapital" upperCase  mask="separator.2" thousandSeparator=",">
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="">Pago Interes</label>
+                        <input type="text" class="form-control" formControlName="PagoInteres" upperCase  mask="separator.2" thousandSeparator=",">
                     </div>
                 </div>
 
@@ -118,19 +139,24 @@
                         </ng-select>
                     </div>
                 </div>
+                
             </div>
         </form>
-    </div> 
+    </div>
 
 
     <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-        <ion-fab-button >
+        <ion-fab-button>
             <ion-icon name="add-outline"></ion-icon>
         </ion-fab-button>
 
         <ion-fab-list side="top">
-            <ion-fab-button color="success" (click)="editPrestamo()"><ion-icon name="save-outline" ></ion-icon></ion-fab-button>
-            <ion-fab-button color="danger" (click)="eliminarPrestamo()"> <ion-icon name="trash-outline" ></ion-icon></ion-fab-button>
+            <ion-fab-button color="success" (click)="editPrestamo()">
+                <ion-icon name="save-outline"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-button color="danger" (click)="eliminarPrestamo()">
+                <ion-icon name="trash-outline"></ion-icon>
+            </ion-fab-button>
         </ion-fab-list>
     </ion-fab>
 

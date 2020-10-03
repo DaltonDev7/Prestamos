@@ -75,6 +75,15 @@ export class ToastMessage {
         return toast.present();
     }
 
+    async cedulaExist() {
+        const toast = await this.toastController.create({
+            message: 'Esta cedula ya esta registrada',
+            position: 'bottom',
+            duration: 3000
+        });
+        return toast.present();
+    }
+
 
 
 
