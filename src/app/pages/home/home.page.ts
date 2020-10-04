@@ -12,8 +12,9 @@ import * as moment from 'moment';
 export class HomePage implements OnInit {
 
 
-  fechaJs:Date;
 
+  fecha;
+  fecha2;
   constructor(
     public router: Router,
     public alertController: AlertController
@@ -23,16 +24,25 @@ export class HomePage implements OnInit {
 
   ngOnInit(): void {
 
+    // var dalton = moment();
 
-    this.fechaJs = new Date();
 
-    var fecha = moment().format('DD/MM/YYYY');
-   // console.log(fecha)
+    
 
-   // var fecha = new Date();
-    console.log(fecha);
+    // this.fecha = moment().format('DD/MM/YYYY HH:mm:ss')
 
-    this.fechaJs = this.sumarMeses(this.fechaJs , 3)
+
+    // //this.fecha2 = moment().add(5, 'months').format('DD/MM/YYYY')
+
+    // console.log(moment().add(4 , 'days').format('DD/MM/YYYY HH:mm:ss')) 
+
+    // var days = 0;
+    // for(var i = 0; i <= 3; i++){
+    //   days += 15;
+    //   this.fecha2 = moment().add(days, 'days').format('DD/MM/YYYY HH:mm:ss')
+    //   console.log( this.fecha2)
+    // }
+
 
   }
 

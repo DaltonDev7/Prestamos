@@ -27,7 +27,7 @@ export class BasedatosService {
         console.log(JSON.stringify(x))
         console.log("a crear la base de datos")
         this.sqlite.create({
-          name:'sistemaprestamos.db',
+          name:'prestamos.db',
           location :'default'
         })
         .then((db:SQLiteObject )=>{

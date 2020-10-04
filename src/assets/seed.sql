@@ -49,10 +49,11 @@ CREATE TABLE IF NOT EXISTS prestamo(
 CREATE TABLE IF NOT EXISTS cuota(
     Id INTEGER PRIMARY KEY AUTOINCREMENT,
     IdPrestamo INTEGER,
+    FechaPago DATETIME,
     CapitalInicial DECIMAL NULL,
-    Interes DECIMAL NULL,
-    Pago DECIMAL NULL,
-    Capital DECIMAL NULL,
+    Valor DECIMAL NULL,
+    PagoCapital DECIMAL NULL,
+    PagoInteres DECIMAL NULL,
     CapitalFinal DECIMAL NULL,
     FechaCreacionCuota DATETIME,
     FOREIGN KEY(IdPrestamo) REFERENCES prestamo(Id)
