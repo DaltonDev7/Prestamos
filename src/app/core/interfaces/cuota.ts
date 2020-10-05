@@ -7,5 +7,6 @@ export interface Cuota {
     PagoCapital?:number; 
     PagoInteres?:number; 
     CapitalFinal?:number;
+    EstadoCuota?:number;
     FechaCreacionCuota?:Date;
 }

@@ -11,6 +11,10 @@
       </ion-row>
     </ion-grid>
 
+    <div class="count-cliente">
+      <h4>Clientes Registrados: {{clienteCount}}</h4>
+    </div>
+
 
     <div *ngFor="let cliente of listCliente | filtro: textoBuscar: 'Nombres'">
       <div class="card-person" [routerLink]="['edit', cliente.Id]">

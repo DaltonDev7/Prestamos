@@ -8,6 +8,7 @@ import { BasedatosService } from './basedatos.service';
 import { ValidatorFormsService } from './validator-forms.service';
 import * as moment from 'moment';
 import { FrecuciaPago } from '../enums/frecuenciaPago.enum';
+import { EstadoCuota } from '../enums/cuotaEstado.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,6 @@ export class PrestamoService {
   prestamo = new BehaviorSubject([]);
   prestamoEdit = new BehaviorSubject([]);
   lastPrestamo = new BehaviorSubject([]);
-  fechaPago;
 
   constructor(
     public baseDatosService: BasedatosService,
@@ -35,9 +35,8 @@ export class PrestamoService {
     prestamo.EstadoPrestamo,
     prestamo.FechaCreacionPrestamo
     FROM prestamo
-    inner join cliente on cliente.Id = prestamo.IdCliente 
-    where EstadoPrestamo like '%ACTIVO%'
-    `
+    inner join cliente on cliente.Id = prestamo.IdCliente`
+    
     return this.baseDatosService.database.executeSql(query, []).then((res) => {
       let items: any = [];
       if (res.rows.length > 0) {
@@ -163,94 +162,99 @@ export class PrestamoService {
     var prestamo: Prestamo;
     this.getUltimoPrestamo().subscribe((data) => {
       if (data != undefined) {
-        prestamo = data[0]
-        console.log("ultimo prestamo" + JSON.stringify(prestamo))
+         prestamo = data[0]
 
-        var cantidadDaysOrMonths = 0;
-        var mesOrDia = 0;
-        var fechaPago;
-        var capitalInicial = prestamo.Monto;
-        var valorCuota = prestamo.ValorCuotas;
-        var pagoCapital = prestamo.PagoCapital;
-        var pagoInteres = prestamo.PagoInteres;
-        var capitalFinal;
-        if (prestamo) {
-          for (let i = 1; i <= prestamo.CantidadCuotas; i++) {
+        if(prestamo.Tipo == 1){
+          
+          console.log("ultimo prestamo" + JSON.stringify(prestamo))
 
-            switch (prestamo.FrecuenciaPago) {
-              case FrecuciaPago.DIARIO:
-                cantidadDaysOrMonths += 1;
-                mesOrDia = 1
-                break;
-              case FrecuciaPago.SEMANAL:
-                cantidadDaysOrMonths += 7;
-                mesOrDia = 1
-                break;
-              case FrecuciaPago.QUINCENAL:
-                cantidadDaysOrMonths += 15;
-                mesOrDia = 1
-                break;
-              case FrecuciaPago.MENSUAL:
-                cantidadDaysOrMonths += 1;
-                mesOrDia = 2
-                break;
+          var cantidadDaysOrMonths = 0;
+          var mesOrDia = 0;
+          var fechaPago;
+          var capitalInicial = prestamo.Monto;
+          var valorCuota = prestamo.ValorCuotas;
+          var pagoCapital = prestamo.PagoCapital;
+          var pagoInteres = prestamo.PagoInteres;
+          var estadoCuota = 2;
+          var capitalFinal;
+       
+            for (let i = 1; i <= prestamo.CantidadCuotas; i++) {
+  
+              switch (prestamo.FrecuenciaPago) {
+                case FrecuciaPago.DIARIO:
+                  cantidadDaysOrMonths += 1;
+                  mesOrDia = 1
+                  break;
+                case FrecuciaPago.SEMANAL:
+                  cantidadDaysOrMonths += 7;
+                  mesOrDia = 1
+                  break;
+                case FrecuciaPago.QUINCENAL:
+                  cantidadDaysOrMonths += 15;
+                  mesOrDia = 1
+                  break;
+                case FrecuciaPago.MENSUAL:
+                  cantidadDaysOrMonths += 1;
+                  mesOrDia = 2
+                  break;
+              }
+  
+              if (mesOrDia == 1) {
+                fechaPago = moment().add(cantidadDaysOrMonths, 'days').format('DD/MM/YYYY');
+              } else {
+                fechaPago = moment().add(cantidadDaysOrMonths, 'months').format('DD/MM/YYYY');
+              }
+  
+              if(i >= 2){
+                capitalInicial = capitalFinal;
+                //capitalInicial = capitalInicial - valorCuota
+              }
+  
+              capitalFinal = capitalInicial - pagoCapital;
+  
+              console.log('-----------------------------');
+              console.log(fechaPago);
+              console.log(capitalInicial);
+              console.log(valorCuota);
+              console.log(pagoCapital);
+              console.log(pagoInteres);
+              console.log(capitalFinal);
+              console.log('-----------------------------');
+  
+              var FechaCreacionCuota = moment().format('DD/MM/YYYY');
+              let cuotaData = [
+                prestamo.Id,
+                fechaPago,
+                capitalInicial,
+                valorCuota,
+                pagoCapital,
+                pagoInteres,
+                capitalFinal,
+                estadoCuota,
+                FechaCreacionCuota
+              ]
+  
+              let query = `
+              INSERT INTO cuota (
+                IdPrestamo,
+                FechaPago,
+                CapitalInicial,
+                Valor,
+                PagoCapital,
+                PagoInteres,
+                CapitalFinal,
+                EstadoCuota,
+                FechaCreacionCuota
+              ) VALUES (?,?,?,?,?,?,?,?,?)`;
+              
+              this.baseDatosService.database.executeSql(query, cuotaData).then(()=>{
+                console.log('cuotas insertado')
+              }).catch((err)=>{
+                console.log(JSON.stringify("error al insertar cuotas" + err));
+              })
+  
             }
-
-            if (mesOrDia == 1) {
-              fechaPago = moment().add(cantidadDaysOrMonths, 'days').format('DD/MM/YYYY');
-            } else {
-              fechaPago = moment().add(cantidadDaysOrMonths, 'months').format('DD/MM/YYYY');
-            }
-
-            if(i >= 2){
-              capitalInicial = capitalFinal;
-              //capitalInicial = capitalInicial - valorCuota
-            }
-
-            capitalFinal = capitalInicial - pagoCapital;
-
-            console.log('-----------------------------');
-            console.log(fechaPago);
-            console.log(capitalInicial);
-            console.log(valorCuota);
-            console.log(pagoCapital);
-            console.log(pagoInteres);
-            console.log(capitalFinal);
-            console.log('-----------------------------');
-
-            var FechaCreacionCuota = moment().format('DD/MM/YYYY');
-            let cuotaData = [
-              prestamo.Id,
-              fechaPago,
-              capitalInicial,
-              valorCuota,
-              pagoCapital,
-              pagoInteres,
-              capitalFinal,
-              FechaCreacionCuota
-            ]
-
-            let query = `
-            INSERT INTO cuota (
-              IdPrestamo,
-              FechaPago,
-              CapitalInicial,
-              Valor,
-              PagoCapital,
-              PagoInteres,
-              CapitalFinal,
-              FechaCreacionCuota
-            ) VALUES (?,?,?,?,?,?,?,?)`;
-            
-            this.baseDatosService.database.executeSql(query, cuotaData).then(()=>{
-              console.log('cuotas insertado')
-            }).catch((err)=>{
-              console.log(JSON.stringify("error al insertar cuotas" + err));
-            })
-
-          }
         }
-
 
       }
     }, (err) => console.log(JSON.stringify(" errorarso" + err)))

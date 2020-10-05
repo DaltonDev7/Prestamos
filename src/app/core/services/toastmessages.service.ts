@@ -84,6 +84,15 @@ export class ToastMessage {
         return toast.present();
     }
 
+    async cuotaUpdate() {
+        const toast = await this.toastController.create({
+            message: 'Cuota actualizada',
+            position: 'bottom',
+            duration: 3000
+        });
+        return toast.present();
+    }
+
 
 
 

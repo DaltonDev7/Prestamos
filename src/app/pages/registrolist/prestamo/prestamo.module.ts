@@ -6,7 +6,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { EditprestamoComponent } from '../editprestamo/editprestamo.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FiltroPipe } from 'src/app/core/pipes/cedula.pipe';
-
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 
 
 @NgModule({
@@ -19,7 +19,8 @@ import { FiltroPipe } from 'src/app/core/pipes/cedula.pipe';
     CommonModule,
     PrestamoroutingModule,
     SharedModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FontAwesomeModule
   ]
 })
 export class PrestamoModule { }

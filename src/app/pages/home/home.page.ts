@@ -15,6 +15,7 @@ export class HomePage implements OnInit {
 
   fecha;
   fecha2;
+  cuotaList;
   constructor(
     public router: Router,
     public alertController: AlertController
@@ -24,24 +25,26 @@ export class HomePage implements OnInit {
 
   ngOnInit(): void {
 
-    // var dalton = moment();
-
-
-    
-
-    // this.fecha = moment().format('DD/MM/YYYY HH:mm:ss')
-
-
-    // //this.fecha2 = moment().add(5, 'months').format('DD/MM/YYYY')
-
-    // console.log(moment().add(4 , 'days').format('DD/MM/YYYY HH:mm:ss')) 
-
-    // var days = 0;
-    // for(var i = 0; i <= 3; i++){
-    //   days += 15;
-    //   this.fecha2 = moment().add(days, 'days').format('DD/MM/YYYY HH:mm:ss')
-    //   console.log( this.fecha2)
-    // }
+    this.cuotaList = [
+      {
+        id:1,
+        nombre:"dalton",
+        apellidos:"tejada",
+        tel:"809-016-5161"
+      },
+      {
+        id:1,
+        nombre:"nicole",
+        apellidos:"peguero",
+        tel:"809-016-0001"
+      },
+      {
+        id:1,
+        nombre:"diego tejada",
+        apellidos:"tejada",
+        tel:"589-556-5161"
+      }
+    ]
 
 
   }

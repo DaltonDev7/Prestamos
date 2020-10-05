@@ -55,6 +55,7 @@ CREATE TABLE IF NOT EXISTS cuota(
     PagoCapital DECIMAL NULL,
     PagoInteres DECIMAL NULL,
     CapitalFinal DECIMAL NULL,
+    EstadoCuota INTEGER,
     FechaCreacionCuota DATETIME,
     FOREIGN KEY(IdPrestamo) REFERENCES prestamo(Id)
 );

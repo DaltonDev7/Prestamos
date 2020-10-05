@@ -13,6 +13,7 @@ export class ClienteComponent implements OnInit {
   textoBuscar:string = '';
   listCliente:any[]= [];
   objpersonas:any[]= []
+  clienteCount:number = 0;
 
   constructor(
     public router : Router, 
@@ -27,6 +28,7 @@ export class ClienteComponent implements OnInit {
       if (data) {
         this.baseDatosService.getClientes().subscribe((clientes)=>{
           this.listCliente = clientes
+          this.clienteCount = this.listCliente.length
         })
       }
     })

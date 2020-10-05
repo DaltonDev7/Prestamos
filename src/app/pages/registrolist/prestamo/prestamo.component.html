@@ -9,6 +9,10 @@
             </ion-col>
           </ion-row>
         </ion-grid>
+
+        <div class="count-prestamo">
+          <h5>Prestamos Registrados: {{prestamosCount }}</h5>
+        </div>
     
     
         <div *ngFor="let prestamo of listPrestamo | filtro: textoBuscar: 'Nombres'">
@@ -19,7 +23,7 @@
               </ion-avatar>
             </div>
             <div class="info-person">
-              <div class="d-flex align-items-center">
+              <div class="">
                 <div>
                   <p> Monto : {{prestamo.Monto | mask: 'separator':','}}</p>
                 </div>

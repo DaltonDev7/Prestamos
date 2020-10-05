@@ -11,8 +11,9 @@ import { PrestamoService } from 'src/app/core/services/prestamo.service';
 export class PrestamoComponent implements OnInit {
 
   //atributos
-  listPrestamo;
+  listPrestamo:any[] = [];
   textoBuscar:string = '';
+  prestamosCount:number = 0;
   data;
   constructor(
     public prestamoService: PrestamoService,
@@ -28,6 +29,7 @@ export class PrestamoComponent implements OnInit {
         this.prestamoService.getPrestamos().subscribe((prestamos)=>{
           console.log("prestamos" + JSON.stringify(prestamos))
           this.listPrestamo = prestamos
+          this.prestamosCount = this.listPrestamo.length
         })
       }
     })
