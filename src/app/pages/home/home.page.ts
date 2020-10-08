@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 
 import * as moment from 'moment';
+import { CuotaService } from 'src/app/core/services/cuota.service';
 
 @Component({
   selector: 'app-home',
@@ -12,18 +13,35 @@ import * as moment from 'moment';
 export class HomePage implements OnInit {
 
 
-
-  fecha;
-  fecha2;
+  //atributos
+  diaActual;
   cuotaList;
+
+
+
   constructor(
     public router: Router,
+    public cuotaService : CuotaService,
     public alertController: AlertController
   ) { }
 
 
 
   ngOnInit(): void {
+
+    moment.locale('es');
+    this.diaActual = moment().format('ll')
+
+
+
+    // this.cuotaService.getCuotas().subscribe((cuotas)=>{
+    //   if (cuotas) {
+    //     this.cuotaList = cuotas;
+    //   }
+    // })
+
+    
+
 
 
     let numeroDecimal = "4520.59"
@@ -32,28 +50,6 @@ export class HomePage implements OnInit {
     let convert = +numeroDecimal
     console.log(convert)
    
-
-   
-    this.cuotaList = [
-      {
-        id:1,
-        nombre:"dalton",
-        apellidos:"tejada",
-        tel:"809-016-5161"
-      },
-      {
-        id:1,
-        nombre:"nicole",
-        apellidos:"peguero",
-        tel:"809-016-0001"
-      },
-      {
-        id:1,
-        nombre:"diego tejada",
-        apellidos:"tejada",
-        tel:"589-556-5161"
-      }
-    ]
 
 
   }

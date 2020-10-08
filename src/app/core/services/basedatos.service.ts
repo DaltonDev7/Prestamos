@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { SQLitePorter } from '@ionic-native/sqlite-porter/ngx';
 import { Cliente } from '../interfaces/cliente';
 import { take } from 'rxjs/operators';
+import { CuotaService } from './cuota.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,8 @@ export class BasedatosService {
     private platform:Platform, 
     private sqlite: SQLite,
     private sqlitePorter : SQLitePorter,
-    public http: HttpClient
+    public http: HttpClient,
+   // public cuotaService: CuotaService
     ) { 
       this.platform.ready().then((x)=>{
         console.log(JSON.stringify(x))
@@ -48,6 +50,7 @@ export class BasedatosService {
           console.log("querys insertado.")
           this.dbReady.next(true);
           console.log("ya esta true")
+         // this.cuotaService.getAllCuotas();
          
         }).catch(e => console.error(JSON.stringify(e)))
       })  

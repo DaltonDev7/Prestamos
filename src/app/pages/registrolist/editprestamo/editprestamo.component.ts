@@ -150,11 +150,42 @@ export class EditprestamoComponent implements OnInit {
     this.router.navigate([currentRoute.join('/')]);
   }
 
-  eliminarCuota(IdCuota){
-    this.cuotaService.deleteCuota(IdCuota, this.prestamo.Id).then(()=>{
-      this.toasMessageService.cuotaDelete();
-    })
+  async eliminarCuota(IdCuota){
+    await this.alertConfirmCuota(IdCuota);
   }
+
+
+  async alertConfirmCuota(IdCuota:number) {
+    const alert = await this.alertController.create({
+      backdropDismiss: false,
+      cssClass: 'my-custom-class',
+      message: `<div> <p> ¿Estas seguro que desea eliminar esta cuota ? </p></div>`,
+      buttons: [
+        {
+          text: 'Si',
+          cssClass: 'secondary',
+          handler: () => {
+
+            this.cuotaService.deleteCuota(IdCuota, this.prestamo.Id).then(()=>{
+              this.toasMessageService.cuotaDelete();
+            }).catch((err) => {
+              console.log(JSON.stringify(err))
+            })
+
+          }
+        },
+        {
+          text: 'No',
+          handler: () => {
+
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
 
   addCuota(){
     let Idprestamo = this.prestamo.Id;

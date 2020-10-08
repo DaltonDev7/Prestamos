@@ -11,6 +11,7 @@ export class CuotaService {
 
 
     cuotaList = new BehaviorSubject([]);
+    allCuotas =  new BehaviorSubject([]);
 
     constructor(
         public baseDatosService: BasedatosService,
@@ -78,8 +79,39 @@ export class CuotaService {
         })
     }
 
+    getAllCuotas(){
+        let query = `SELECT * FROM cuota`;
+
+        return this.baseDatosService.database.executeSql(query , []).then((res)=>{
+            let items: any = [];
+            if (res.rows.length > 0) {
+                for (var i = 0; i < res.rows.length; i++) {
+                    items.push({
+                        Id: res.rows.item(i).Id,
+                        IdPrestamo: res.rows.item(i).IdPrestamo,
+                        FechaPago: res.rows.item(i).FechaPago,
+                        CapitalInicial: res.rows.item(i).CapitalInicial,
+                        Valor: res.rows.item(i).Valor,
+                        PagoCapital: res.rows.item(i).PagoCapital,
+                        PagoInteres: res.rows.item(i).PagoInteres,
+                        CapitalFinal: res.rows.item(i).CapitalFinal,
+                        EstadoCuota : res.rows.item(i).EstadoCuota,
+                        FechaCreacionCuota: res.rows.item(i).FechaCreacionCuota
+                    });
+                }
+            }
+            this.allCuotas.next(items)
+        }).catch((err)=>{
+            console.log("errror al obtener todas las cuotas" + err)
+        })
+    }
+
     getListCuota(){
         return this.cuotaList.asObservable();
+    }
+
+    getCuotas(){
+        return this.allCuotas.asObservable();
     }
 
     updateCuota(IdCuota:number, cuota:Cuota){
