@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BasedatosService } from './basedatos.service';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { Cuota } from '../interfaces/cuota';
+import * as moment from 'moment';
 
 @Injectable({
     providedIn: 'root'
@@ -14,6 +15,38 @@ export class CuotaService {
     constructor(
         public baseDatosService: BasedatosService,
     ) { }
+
+
+    addCuota(cuota:Cuota){
+        var FechaCreacionCuota = moment().format('DD/MM/YYYY');
+        var FechaPago  = moment().format('DD/MM/YYYY');
+        let data = [
+            cuota.IdPrestamo,
+            cuota.FechaPago,
+            cuota.CapitalInicial,
+            cuota.Valor,
+            cuota.PagoCapital,
+            cuota.PagoInteres,
+            cuota.CapitalFinal,
+            cuota.EstadoCuota,
+            FechaCreacionCuota
+        ]
+
+        let query = `INSERT INTO cuota(
+            IdPrestamo,
+            FechaPago,
+            CapitalInicial,
+            Valor,
+            PagoCapital,
+            PagoInteres,
+            CapitalFinal,
+            EstadoCuota,
+            FechaCreacionCuota) VALUES (?,?,?,?,?,?,?,?,?) `
+
+            return this.baseDatosService.database.executeSql(query , data).then(()=>{
+                console.log('insertado')
+            }).catch((err) => { console.log(JSON.stringify(err))})
+    }
 
 
     getCuotasByIdPrestamo(IdPrestamo: number) {
@@ -67,8 +100,26 @@ export class CuotaService {
             console.log("estado cuota actulizado")
             this.getCuotasByIdPrestamo(cuota.IdPrestamo)
         })
+    }
+
+    deleteCuota(IdCuota:number, IdPrestamo:number){
+        let query = `DELETE FROM cuota WHERE Id = ?`
+        return this.baseDatosService.database.executeSql(query, [IdCuota]).then(()=>{
+            this.getCuotasByIdPrestamo(IdPrestamo);
+        })
+    }
 
 
+
+    setDecimales(valor:number){
+        //primero lo convertimos a string
+        var valorString = valor.toString();
+        //luego establecemos que solo queremos 2 numeros despues del punto
+        var resultado = parseFloat(valorString).toFixed(2);
+        // lo convertimos a number otra vez
+        var resultadoFormat = +resultado
+        console.log("resutlado formateado" + resultadoFormat)
+        return resultadoFormat;
     }
 
 

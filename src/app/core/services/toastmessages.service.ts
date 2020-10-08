@@ -93,6 +93,24 @@ export class ToastMessage {
         return toast.present();
     }
 
+    async cuotaDelete() {
+        const toast = await this.toastController.create({
+            message: 'Cuota eliminada',
+            position: 'bottom',
+            duration: 3000
+        });
+        return toast.present();
+    }
+
+    async cuotaSave() {
+        const toast = await this.toastController.create({
+            message: 'Cuota guardada',
+            position: 'bottom',
+            duration: 3000
+        });
+        return toast.present();
+    }
+
 
 
 

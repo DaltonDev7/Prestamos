@@ -69,19 +69,24 @@ export class ComboxService {
 
   EstadoCombox: Combox[] = [
     { id: "ACTIVO", text: "ACTIVO" },
-    { id: "INACTIVO", text: "INACTIVO"}
+    { id: "INACTIVO", text: "INACTIVO" }
   ]
 
   tipoPrestamo: any[] = [
     { id: 1, text: "DEFINIDO" },
-    { id: 2, text: "INDEFINIDO"}
+    { id: 2, text: "INDEFINIDO" }
   ]
 
-  frecuenciaPago : any[] = [
-    { id: 30.5 , text: "DIARIO"},
-    { id: 4 , text: "SEMANAL"},
-    { id: 2 , text: "QUINCENAL"},
-    { id: 1 , text: "MENSUAL"},
+  frecuenciaPago: any[] = [
+    { id: 30.5, text: "DIARIO" },
+    { id: 4, text: "SEMANAL" },
+    { id: 2, text: "QUINCENAL" },
+    { id: 1, text: "MENSUAL" },
+  ]
+
+  estadoCuota: any[] = [
+    { id: 1, text: "PAGADO" },
+    { id: 2, text: "NO PAGADO" }
   ]
 
 

@@ -1,0 +1,83 @@
+<ion-content color="fondo">
+  <div class="container m-top" color="fondo">
+
+    <h5>Registar Cuota</h5>
+
+    <form [formGroup]="cuotaForm">
+      <div class="row">
+
+        <div class="col-sm-12 col-md-6 col-lg-4">
+          <div class="form-group">
+            <label for="">Capital Inicial</label>
+            <input type="text" class="form-control" formControlName="CapitalInicial" mask="separator.2"
+              thousandSeparator="," upperCase>
+          </div>
+        </div>
+
+        <div class="col-sm-12 col-md-6 col-lg-4">
+          <div class="form-group">
+            <label for="">Fecha Pago</label>
+            <input type="date" class="form-control" formControlName="FechaPago" upperCase>
+          </div>
+        </div>
+
+        <div class="col-sm-12 col-md-6 col-lg-4">
+          <div class="form-group">
+            <label for="">Valor Cuota</label>
+            <input type="text" class="form-control" formControlName="Valor" upperCase mask="separator.2"
+              thousandSeparator=",">
+          </div>
+        </div>
+
+        <div class="col-sm-12 col-md-6 col-lg-4">
+          <div class="form-group">
+            <label for="">Pago Capital</label>
+            <input type="text" class="form-control" formControlName="PagoCapital" mask="separator.2"
+              thousandSeparator="," upperCase>
+          </div>
+        </div>
+
+
+        <div class="col-sm-12 col-md-6 col-lg-4">
+          <div class="form-group">
+            <label for="">Pago Interes</label>
+            <input type="text" class="form-control" formControlName="PagoInteres" mask="separator.2"
+              thousandSeparator="," upperCase>
+          </div>
+        </div>
+
+        <div class="col-sm-12 col-md-6 col-lg-4">
+          <div class="form-group">
+            <label for="">Capital Final</label>
+            <input type="text" class="form-control" formControlName="CapitalFinal" mask="separator.2"
+              thousandSeparator="," upperCase>
+          </div>
+        </div>
+
+
+        <div class="col-sm-12 col-md-6 col-lg-4">
+          <div class="form-group">
+            <label for="">Estado Cuota</label>
+            <ng-select bindLabel="text" bindValue="id" upperCase placeholder="Seleccione" [items]="estadoCuotaCombox"
+              formControlName="EstadoCuota">
+            </ng-select>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab-button color="success" (click)="saveCuota()">
+        <ion-icon name="save-sharp"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+
+
+
+
+
+
+
+
+  </div>
+</ion-content>

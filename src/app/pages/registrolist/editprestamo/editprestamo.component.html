@@ -143,6 +143,10 @@
             </div>
         </form>
 
+        <div *ngIf="prestamoTipo == 2" class="mg-btn">
+            <button class="btn btn-success" (click)="addCuota()">Agregar Cuota</button>
+        </div>
+
         <table class="table">
             <thead class="thead-dark">
               <tr>
@@ -154,6 +158,9 @@
                 <th scope="col">Pago Interes</th>
                 <th scope="col">Capital Final</th>
                 <th scope="col">Estado</th>
+                <th scope="col" *ngIf="prestamoTipo == 2">Accion</th>
+
+                
               </tr>
             </thead>
             <tbody *ngFor="let cuota of cuotaList; let i = index;">
@@ -172,6 +179,11 @@
                 <td *ngIf="cuota.EstadoCuota == 1" (click)="actualizarCuota(cuota)">
                     PAGADO
                     <fa-icon icon="check-circle" class="icon-pagado"></fa-icon>
+                </td>
+                <td *ngIf="prestamoTipo == 2">
+                    <button class="btn btn-danger" (click)="eliminarCuota(cuota.Id)">
+                        <fa-icon icon="trash-alt" class=""></fa-icon>
+                    </button>
                 </td>
               </tr>
             </tbody>

@@ -10,6 +10,8 @@ import { ToastMessage } from 'src/app/core/services/toastmessages.service';
 import { Cliente } from 'src/app/core/interfaces/cliente';
 import { ClienteService } from 'src/app/core/services/cliente.service';
 import { ValidatorFormsService } from 'src/app/core/services/validator-forms.service';
+import { pipe } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 
 @Component({
@@ -36,6 +38,7 @@ export class RegistrarClientePage implements OnInit {
   constructor(
     private formsBuilderService: FormsBuilderService,
     public baseDatosService: BasedatosService,
+    private clienteService: ClienteService,
     public comboxServices: ComboxService,
     public toastController: ToastController,
     public toasMessageService: ToastMessage,
@@ -61,7 +64,7 @@ export class RegistrarClientePage implements OnInit {
     this.clienteForm.get('Cedula').valueChanges.subscribe((data)=>{
       if(data.length == 11){
         this.clienteServices.getClienteByCedula(data).then(()=>{
-
+          this.validateCliente();
         })
       }
     })
@@ -78,9 +81,7 @@ export class RegistrarClientePage implements OnInit {
     if (this.clienteForm.invalid) {
       await this.toasMessageService.showClienteInvalid();
     } else {
-
-     // this.validateMask();
-
+      
       this.baseDatosService.addCliente(
         this.clienteForm.value
       ).then((data) => {
@@ -127,9 +128,10 @@ export class RegistrarClientePage implements OnInit {
       console.log("obteniedo datos " + JSON.stringify(cliente))
       if(cliente[0]){
         this.toasMessageService.cedulaExist();
-        this.validatorServices.disabledAllControls(this.clienteForm , ['Cedula'])
+        this.clienteForm.get('Cedula').setValue(null)
+        //this.validatorServices.disabledAllControls(this.clienteForm , ['Cedula'])
       }else{
-        this.validatorServices.enableAllControls(this.clienteForm );
+       // this.validatorServices.enableAllControls(this.clienteForm );
       }
     })
   }

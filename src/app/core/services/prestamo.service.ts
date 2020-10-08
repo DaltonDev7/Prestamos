@@ -36,7 +36,7 @@ export class PrestamoService {
     prestamo.FechaCreacionPrestamo
     FROM prestamo
     inner join cliente on cliente.Id = prestamo.IdCliente`
-    
+
     return this.baseDatosService.database.executeSql(query, []).then((res) => {
       let items: any = [];
       if (res.rows.length > 0) {
@@ -82,7 +82,7 @@ export class PrestamoService {
           }
         }
         this.lastPrestamo.next(items)
-         this.saveCuotas();
+        this.saveCuotas();
       }).catch((err) => {
         console.log("error al obtener el ultimo prestamo" + JSON.stringify(err))
       })
@@ -162,10 +162,10 @@ export class PrestamoService {
     var prestamo: Prestamo;
     this.getUltimoPrestamo().subscribe((data) => {
       if (data != undefined) {
-         prestamo = data[0]
+        prestamo = data[0]
 
-        if(prestamo.Tipo == 1){
-          
+        if (prestamo.Tipo == 1) {
+
           console.log("ultimo prestamo" + JSON.stringify(prestamo))
 
           var cantidadDaysOrMonths = 0;
@@ -177,64 +177,64 @@ export class PrestamoService {
           var pagoInteres = prestamo.PagoInteres;
           var estadoCuota = 2;
           var capitalFinal;
-       
-            for (let i = 1; i <= prestamo.CantidadCuotas; i++) {
-  
-              switch (prestamo.FrecuenciaPago) {
-                case FrecuciaPago.DIARIO:
-                  cantidadDaysOrMonths += 1;
-                  mesOrDia = 1
-                  break;
-                case FrecuciaPago.SEMANAL:
-                  cantidadDaysOrMonths += 7;
-                  mesOrDia = 1
-                  break;
-                case FrecuciaPago.QUINCENAL:
-                  cantidadDaysOrMonths += 15;
-                  mesOrDia = 1
-                  break;
-                case FrecuciaPago.MENSUAL:
-                  cantidadDaysOrMonths += 1;
-                  mesOrDia = 2
-                  break;
-              }
-  
-              if (mesOrDia == 1) {
-                fechaPago = moment().add(cantidadDaysOrMonths, 'days').format('DD/MM/YYYY');
-              } else {
-                fechaPago = moment().add(cantidadDaysOrMonths, 'months').format('DD/MM/YYYY');
-              }
-  
-              if(i >= 2){
-                capitalInicial = capitalFinal;
-                //capitalInicial = capitalInicial - valorCuota
-              }
-  
-              capitalFinal = capitalInicial - pagoCapital;
-  
-              console.log('-----------------------------');
-              console.log(fechaPago);
-              console.log(capitalInicial);
-              console.log(valorCuota);
-              console.log(pagoCapital);
-              console.log(pagoInteres);
-              console.log(capitalFinal);
-              console.log('-----------------------------');
-  
-              var FechaCreacionCuota = moment().format('DD/MM/YYYY');
-              let cuotaData = [
-                prestamo.Id,
-                fechaPago,
-                capitalInicial,
-                valorCuota,
-                pagoCapital,
-                pagoInteres,
-                capitalFinal,
-                estadoCuota,
-                FechaCreacionCuota
-              ]
-  
-              let query = `
+
+          for (let i = 1; i <= prestamo.CantidadCuotas; i++) {
+
+            switch (prestamo.FrecuenciaPago) {
+              case FrecuciaPago.DIARIO:
+                cantidadDaysOrMonths += 1;
+                mesOrDia = 1
+                break;
+              case FrecuciaPago.SEMANAL:
+                cantidadDaysOrMonths += 7;
+                mesOrDia = 1
+                break;
+              case FrecuciaPago.QUINCENAL:
+                cantidadDaysOrMonths += 15;
+                mesOrDia = 1
+                break;
+              case FrecuciaPago.MENSUAL:
+                cantidadDaysOrMonths += 1;
+                mesOrDia = 2
+                break;
+            }
+
+            if (mesOrDia == 1) {
+              fechaPago = moment().add(cantidadDaysOrMonths, 'days').format('DD/MM/YYYY');
+            } else {
+              fechaPago = moment().add(cantidadDaysOrMonths, 'months').format('DD/MM/YYYY');
+            }
+
+            if (i >= 2) {
+              capitalInicial = capitalFinal;
+              //capitalInicial = capitalInicial - valorCuota
+            }
+
+            capitalFinal = capitalInicial - pagoCapital;
+
+            console.log('-----------------------------');
+            console.log(fechaPago);
+            console.log(capitalInicial);
+            console.log(valorCuota);
+            console.log(pagoCapital);
+            console.log(pagoInteres);
+            console.log(capitalFinal);
+            console.log('-----------------------------');
+
+            var FechaCreacionCuota = moment().format('DD/MM/YYYY');
+            let cuotaData = [
+              prestamo.Id,
+              fechaPago,
+              capitalInicial,
+              valorCuota,
+              pagoCapital,
+              pagoInteres,
+              capitalFinal,
+              estadoCuota,
+              FechaCreacionCuota
+            ]
+
+            let query = `
               INSERT INTO cuota (
                 IdPrestamo,
                 FechaPago,
@@ -246,14 +246,36 @@ export class PrestamoService {
                 EstadoCuota,
                 FechaCreacionCuota
               ) VALUES (?,?,?,?,?,?,?,?,?)`;
-              
-              this.baseDatosService.database.executeSql(query, cuotaData).then(()=>{
-                console.log('cuotas insertado')
-              }).catch((err)=>{
-                console.log(JSON.stringify("error al insertar cuotas" + err));
-              })
-  
-            }
+
+            this.baseDatosService.database.executeSql(query, cuotaData).then(() => {
+              console.log('cuotas insertado')
+            }).catch((err) => {
+              console.log(JSON.stringify("error al insertar cuotas" + err));
+            })
+
+          }
+        } else {
+          /*
+           LO UNICO QUE SE SABE
+           CUOTAS INDEFINIDO
+           CAPITAL: ES EL MONTO QUE SE PRESTO
+           PAGO INTERES : INTERES(SACARLE EL PORCENTAJE) * CAPITAL
+           VALOR : DEPENDE DE LA CATIDAD DEL CLIENTE ( EJ: 4000  )
+           PAGO CAPITAL : VALOR DE LA CUOTA - PAGO INTERES  
+           CAPITAL FINAL : MONTO - PAGO CAPITAL
+           */
+
+           var capitalInicial = prestamo.Monto;
+           var pagoInteres = prestamo.PagoInteres;
+          // var valorCuota = prestamo.ValorCuotas;
+          // var pagoCapital = prestamo.PagoCapital;
+          // var estadoCuota = 2;
+
+
+
+
+
+
         }
 
       }
@@ -438,24 +460,8 @@ export class PrestamoService {
       VALOR : DEPENDE DE LA CATIDAD DEL CLIENTE ( EJ: 4000  )
       PAGO CAPITAL : VALOR DE LA CUOTA - PAGO INTERES  
       CAPITAL FINAL : MONTO - PAGO CAPITAL
-
       
       */
-
-
-      // se multiplica el monto por el interes
-      // let montoXinteres = montoPrestamo * interes;
-      // //luego se divide entre 100 para sacar el porcentaje
-      // let porcentaje = Math.round(montoXinteres / 100);
-      // // se saca el valor de cada cuota
-      // let valorCuota = cantidadCuotas * porcentaje;
-      // console.log(valorCuota)
-      // let totalPago = Math.round(montoPrestamo + valorCuota);
-      // console.log(totalPago)
-      // valorCuota = totalPago / cantidadCuotas
-      // console.log(valorCuota)
-      // prestamoForm.get('ValorCuotas').patchValue(valorCuota);
-      // prestamoForm.get('TotalPago').patchValue(totalPago);
     })
 
   }

@@ -58,8 +58,7 @@ export class RegistrarPrestamoPage implements OnInit {
       }
     })
 
-    var dalton = momentJs().format('DD/MM/YYYY HH:mm:ss');
-    console.log("fecha dalton " + dalton)
+  
 
 
     if (this.clienteService.clienteReadOnly != null) {
@@ -102,8 +101,6 @@ export class RegistrarPrestamoPage implements OnInit {
 
       this.prestamoForm.patchValue({ 'IdCliente': this.cliente.Id });
       this.prestamoService.addPrestamo(this.prestamoForm.getRawValue()).then((data) => {
-        //this.saveCuotas();
-        // this.insertDatos();
         this.prestamoForm.reset();
         this.toastService.showMessagePrestamoSaved();
       }).catch((err) => {
@@ -111,103 +108,6 @@ export class RegistrarPrestamoPage implements OnInit {
       })
     }
   }
-
-  public saveCuotas() {
-
-    var fechaPago;
-    var dalton = momentJs().format('DD/MM/YYYY HH:mm:ss');
-    console.log("fecha dalton " + dalton)
-
-      this.prestamoService.getUltimoPrestamo().subscribe((data) => {
-        if (data != undefined) {
-          this.prestamo = data[0]
-          this.permiso = true;
-          console.log("ultimo prestamo" + JSON.stringify(this.prestamo))
-
-
-          var cantidadDaysOrMonths = 0;
-          var mesOrDia = 0;
-
-          if (this.prestamo) {
-            for (let i = 0; i < this.prestamo.CantidadCuotas; i++) {
-
-              switch (this.prestamo.FrecuenciaPago) {
-                case FrecuciaPago.DIARIO:
-                  cantidadDaysOrMonths += 1;
-                  mesOrDia = 1
-                  break;
-                case FrecuciaPago.SEMANAL:
-                  cantidadDaysOrMonths += 7;
-                  mesOrDia = 1
-                  break;
-                case FrecuciaPago.QUINCENAL:
-                  cantidadDaysOrMonths += 15;
-                  mesOrDia = 1
-                  break;
-                case FrecuciaPago.MENSUAL:
-                  cantidadDaysOrMonths += 1;
-                  mesOrDia = 2
-                  break;
-              }
-
-              if (mesOrDia == 1) {
-                fechaPago = momentJs().add(cantidadDaysOrMonths, 'days').format('DD/MM/YYYY HH:mm:ss');
-              } else {
-                fechaPago = momentJs().add(cantidadDaysOrMonths, 'months').format('DD/MM/YYYY HH:mm:ss');
-              }
-              console.log(cantidadDaysOrMonths)
-              console.log(fechaPago)
-
-            }
-          }
-
-
-        }
-      }, (err) => console.log(JSON.stringify(" errorarso" + err)))
-  }
-
-
-
-
-  insertDatos() {
-
-    var cantidadDaysOrMonths = 0;
-    var mesOrDia = 0;
-    var fechaPago;
-    if (this.prestamo) {
-      for (let i = 0; i < this.prestamo.CantidadCuotas; i++) {
-
-        switch (this.prestamo.FrecuenciaPago) {
-          case FrecuciaPago.DIARIO:
-            cantidadDaysOrMonths += 1;
-            mesOrDia = 1
-            break;
-          case FrecuciaPago.SEMANAL:
-            cantidadDaysOrMonths += 7;
-            mesOrDia = 1
-            break;
-          case FrecuciaPago.QUINCENAL:
-            cantidadDaysOrMonths += 15;
-            mesOrDia = 1
-            break;
-          case FrecuciaPago.MENSUAL:
-            cantidadDaysOrMonths += 15;
-            mesOrDia = 2
-            break;
-        }
-
-        if (mesOrDia == 1) {
-          fechaPago = momentJs().add(cantidadDaysOrMonths, 'days').format('DD/MM/YYYY HH:mm:ss');
-        } else {
-          fechaPago = momentJs().add(cantidadDaysOrMonths, 'months').format('DD/MM/YYYY HH:mm:ss');
-        }
-        console.log(cantidadDaysOrMonths)
-        console.log(fechaPago)
-
-      }
-    }
-  }
-
 
 
 }

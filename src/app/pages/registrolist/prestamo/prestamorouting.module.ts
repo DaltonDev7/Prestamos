@@ -4,6 +4,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { PrestamoComponent } from './prestamo.component';
 import { EditprestamoComponent } from '../editprestamo/editprestamo.component';
 import { EditPrestamoResolver } from 'src/app/core/resolvers/edit-prestamo.resolver';
+import { EditCuotaComponent } from '../edit-cuota/edit-cuota.component';
+import { AddCuotaComponent } from '../add-cuota/add-cuota.component';
 
 const routes: Routes = [
   {
@@ -16,6 +18,18 @@ const routes: Routes = [
     resolve :{
       prestamo : EditPrestamoResolver
     }
+  },
+  {
+    path:'addCuota/:id',
+    component: AddCuotaComponent,
+    resolve :{
+      prestamo : EditPrestamoResolver
+    }
+
+  },
+  {
+    path:'editcuota/:id',
+    component: EditCuotaComponent
   }
 ]
 

@@ -1,6 +1,7 @@
+import { Route } from '@angular/compiler/src/core';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { Combox } from 'src/app/core/interfaces/combox';
 import { Cuota } from 'src/app/core/interfaces/cuota';
@@ -23,6 +24,7 @@ export class EditprestamoComponent implements OnInit {
   prestamoForm: FormGroup;
   clienteForm: FormGroup;
   prestamo: Prestamo;
+  prestamoTipo:number;
   cuotaList:Cuota[] = [];
 
   //combox
@@ -37,7 +39,9 @@ export class EditprestamoComponent implements OnInit {
     public alertService: AlertService,
     public toasMessageService: ToastMessage,
     public alertController: AlertController,
-    public cuotaService : CuotaService
+    public cuotaService : CuotaService,
+    public activatedRoute : ActivatedRoute,
+    public router : Router
   ) { }
 
   ngOnInit() {
@@ -51,6 +55,7 @@ export class EditprestamoComponent implements OnInit {
     this.prestamoService.getPrestamoEdit().subscribe((prestamo) => {
       if (prestamo[0]) {
         this.prestamo = prestamo[0];
+        this.prestamoTipo = this.prestamo.Tipo
         this.clienteForm.patchValue(prestamo[0]);
         this.prestamoForm.patchValue(this.prestamo);
         this.prestamoForm.patchValue({ 'InteresGenerar': this.prestamo.InteresGenerar })
@@ -130,6 +135,34 @@ export class EditprestamoComponent implements OnInit {
     this.cuotaService.updateCuota(cuota.Id , cuota).then(()=>{
       this.toasMessageService.cuotaUpdate();
     })
+  }
+
+  editarCuota(cuota:Cuota){
+    //localhos:8000/prestamo/edit/5
+    let idCuota = cuota.Id;
+    let cuotaIdFormat = idCuota.toString()
+
+    let currentRoute = this.router.url.split('/');
+    currentRoute.pop();
+    currentRoute.pop();
+    currentRoute.push('editcuota')
+    currentRoute.push(cuotaIdFormat)
+    this.router.navigate([currentRoute.join('/')]);
+  }
+
+  eliminarCuota(IdCuota){
+    this.cuotaService.deleteCuota(IdCuota, this.prestamo.Id).then(()=>{
+      this.toasMessageService.cuotaDelete();
+    })
+  }
+
+  addCuota(){
+    let Idprestamo = this.prestamo.Id;
+    let currentRoute = this.router.url.split('/');
+    currentRoute.pop();
+    currentRoute.pop();
+    currentRoute.push('addCuota')
+    this.router.navigate([currentRoute.join('/') , Idprestamo] , );
   }
 
 }

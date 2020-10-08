@@ -25,6 +25,15 @@ export class HomePage implements OnInit {
 
   ngOnInit(): void {
 
+
+    let numeroDecimal = "4520.59"
+    console.log(numeroDecimal)
+
+    let convert = +numeroDecimal
+    console.log(convert)
+   
+
+   
     this.cuotaList = [
       {
         id:1,
