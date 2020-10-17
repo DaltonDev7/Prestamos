@@ -13,6 +13,7 @@ export class ClienteService {
   //atributos
   cliente = new BehaviorSubject([]);
   clienteCedula = new BehaviorSubject([]);
+  clienteprestamoReadOnly = new BehaviorSubject([]);
   clienteReadOnly;
 
   constructor(
@@ -60,7 +61,11 @@ export class ClienteService {
   }
 
   getClienteCedula() {
-    return this.clienteCedula.asObservable();
+    return this.clienteCedula.asObservable()
+  }
+
+  getReadOnlyClientePrestamo(){
+    return this.clienteprestamoReadOnly.asObservable()
   }
 
 
@@ -93,6 +98,7 @@ export class ClienteService {
         }
 
         this.clienteCedula.next(items)
+        this.clienteprestamoReadOnly.next(items);
 
       }).then(() => {
        // this.getDataPersonReadOnly();

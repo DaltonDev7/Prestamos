@@ -7,6 +7,7 @@ import { HomePage } from './home.page';
 import { HomePageRoutingModule } from './home-routing.module';
 import { MomentModule } from 'ngx-moment';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   imports: [
@@ -14,7 +15,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
     FormsModule,
     IonicModule,
     FontAwesomeModule,
-
+    SharedModule,
     HomePageRoutingModule,
     MomentModule.forRoot({
       relativeTimeThresholdOptions: {

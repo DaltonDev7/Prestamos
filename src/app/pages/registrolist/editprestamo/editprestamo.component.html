@@ -142,56 +142,52 @@
                 
             </div>
         </form>
+    </div>
 
-        <div *ngIf="prestamoTipo == 2" class="mg-btn">
-            <button class="btn btn-success" (click)="addCuota()">Agregar Cuota</button>
-        </div>
+    <div *ngIf="prestamoTipo == 2" class="mg-btn">
+        <button class="btn btn-success" (click)="addCuota()">Agregar Cuota</button>
+    </div>
 
-        <table class="table">
-            <thead class="thead-dark">
-              <tr>
-                <th scope="col">#NO</th>
-                <th scope="col">Fecha</th>
-                <th scope="col">Capital Inicial</th>
-                <th scope="col">Valor</th>
-                <th scope="col">Pago Capital</th>
-                <th scope="col">Pago Interes</th>
-                <th scope="col">Capital Final</th>
-                <th scope="col">Estado</th>
-                <th scope="col" *ngIf="prestamoTipo == 2">Accion</th>
-
-                
-              </tr>
-            </thead>
-            <tbody *ngFor="let cuota of cuotaList; let i = index;">
-              <tr>
-                <th scope="row">{{i+1}}</th>
-                <td>{{cuota.FechaPago}}</td>
-                <td>{{cuota.CapitalInicial | mask: 'separator':','}}</td>
-                <td>{{cuota.Valor | mask: 'separator':','}}</td>
-                <td>{{cuota.PagoCapital | mask: 'separator':','}}</td>
-                <td>{{cuota.PagoInteres | mask: 'separator':','}}</td>
-                <td>{{cuota.CapitalFinal | mask: 'separator':','}}</td>
-                <td *ngIf="cuota.EstadoCuota == 2" (click)="actualizarCuota(cuota)">
-                    NO PAGADO
-                    <fa-icon icon="times-circle" class="icon-nopagado"></fa-icon>
-                </td>
-                <td *ngIf="cuota.EstadoCuota == 1" (click)="actualizarCuota(cuota)">
-                    PAGADO
-                    <fa-icon icon="check-circle" class="icon-pagado"></fa-icon>
-                </td>
-                <td *ngIf="prestamoTipo == 2">
-                    <button class="btn btn-danger" (click)="eliminarCuota(cuota.Id)">
-                        <fa-icon icon="trash-alt" class=""></fa-icon>
-                    </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          
-        
-
-
+    <div class="div-cuotas">
+    <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">#NO</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Capital Inicial</th>
+            <th scope="col">Valor</th>
+            <th scope="col">Pago Capital</th>
+            <th scope="col">Pago Interes</th>
+            <th scope="col">Capital Final</th>
+            <th scope="col">Estado</th>
+            <th scope="col" *ngIf="prestamoTipo == 2">Accion</th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let cuota of cuotaList; let i = index;">
+          <tr>
+            <th scope="row">{{i+1}}</th>
+            <td>{{cuota.FechaPago}}</td>
+            <td>{{cuota.CapitalInicial | mask: 'separator':','}}</td>
+            <td>{{cuota.Valor | mask: 'separator':','}}</td>
+            <td>{{cuota.PagoCapital | mask: 'separator':','}}</td>
+            <td>{{cuota.PagoInteres | mask: 'separator':','}}</td>
+            <td>{{cuota.CapitalFinal | mask: 'separator':','}}</td>
+            <td *ngIf="cuota.EstadoCuota == 2" (click)="actualizarCuota(cuota)">
+                NO PAGADO
+                <fa-icon icon="times-circle" class="icon-nopagado"></fa-icon>
+            </td>
+            <td *ngIf="cuota.EstadoCuota == 1" (click)="actualizarCuota(cuota)">
+                PAGADO
+                <fa-icon icon="check-circle" class="icon-pagado"></fa-icon>
+            </td>
+            <td *ngIf="prestamoTipo == 2">
+                <button class="btn btn-danger" (click)="eliminarCuota(cuota.Id)">
+                    <fa-icon icon="trash-alt" class=""></fa-icon>
+                </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
 

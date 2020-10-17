@@ -36,7 +36,7 @@ export class FormsBuilderService {
     getCuotaFormBuilder() {
         return this.fb.group({
             'IdPrestamo':[null],
-            'FechaPago':[null, [Validators.required]],
+            'FechaPago':[null],
             'CapitalInicial': [{ value: null, disabled: true }],
             'Valor': [null, [Validators.required]],
             'PagoCapital': [{ value: null, disabled: true }],

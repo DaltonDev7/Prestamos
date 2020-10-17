@@ -3,6 +3,7 @@ import { BasedatosService } from './basedatos.service';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { Cuota } from '../interfaces/cuota';
 import * as moment from 'moment';
+import { FormatService } from './formar.service';
 
 @Injectable({
     providedIn: 'root'
@@ -15,6 +16,7 @@ export class CuotaService {
 
     constructor(
         public baseDatosService: BasedatosService,
+        public formatService : FormatService
     ) { }
 
 
@@ -23,7 +25,7 @@ export class CuotaService {
         var FechaPago  = moment().format('DD/MM/YYYY');
         let data = [
             cuota.IdPrestamo,
-            cuota.FechaPago,
+            FechaPago,
             cuota.CapitalInicial,
             cuota.Valor,
             cuota.PagoCapital,
@@ -45,6 +47,10 @@ export class CuotaService {
             FechaCreacionCuota) VALUES (?,?,?,?,?,?,?,?,?) `
 
             return this.baseDatosService.database.executeSql(query , data).then(()=>{
+                let fechaActual =  new Date();
+                let fechaFormat = this.formatService.formatDate(fechaActual)
+                this.baseDatosService.getAllCuotas(fechaFormat)
+                this.baseDatosService.getAllCuotasPosteriores(fechaFormat)
                 console.log('insertado')
             }).catch((err) => { console.log(JSON.stringify(err))})
     }
@@ -79,40 +85,11 @@ export class CuotaService {
         })
     }
 
-    getAllCuotas(){
-        let query = `SELECT * FROM cuota`;
-
-        return this.baseDatosService.database.executeSql(query , []).then((res)=>{
-            let items: any = [];
-            if (res.rows.length > 0) {
-                for (var i = 0; i < res.rows.length; i++) {
-                    items.push({
-                        Id: res.rows.item(i).Id,
-                        IdPrestamo: res.rows.item(i).IdPrestamo,
-                        FechaPago: res.rows.item(i).FechaPago,
-                        CapitalInicial: res.rows.item(i).CapitalInicial,
-                        Valor: res.rows.item(i).Valor,
-                        PagoCapital: res.rows.item(i).PagoCapital,
-                        PagoInteres: res.rows.item(i).PagoInteres,
-                        CapitalFinal: res.rows.item(i).CapitalFinal,
-                        EstadoCuota : res.rows.item(i).EstadoCuota,
-                        FechaCreacionCuota: res.rows.item(i).FechaCreacionCuota
-                    });
-                }
-            }
-            this.allCuotas.next(items)
-        }).catch((err)=>{
-            console.log("errror al obtener todas las cuotas" + err)
-        })
-    }
 
     getListCuota(){
         return this.cuotaList.asObservable();
     }
 
-    getCuotas(){
-        return this.allCuotas.asObservable();
-    }
 
     updateCuota(IdCuota:number, cuota:Cuota){
         let query = `UPDATE cuota SET EstadoCuota = ? WHERE Id = ${IdCuota}`;
@@ -131,6 +108,10 @@ export class CuotaService {
         return this.baseDatosService.database.executeSql(query , data).then(()=>{
             console.log("estado cuota actulizado")
             this.getCuotasByIdPrestamo(cuota.IdPrestamo)
+            let fechaActual =  new Date();
+            let fechaFormat = this.formatService.formatDate(fechaActual)
+            this.baseDatosService.getAllCuotas(fechaFormat)
+            this.baseDatosService.getAllCuotasPosteriores(fechaFormat)
         })
     }
 
@@ -138,6 +119,10 @@ export class CuotaService {
         let query = `DELETE FROM cuota WHERE Id = ?`
         return this.baseDatosService.database.executeSql(query, [IdCuota]).then(()=>{
             this.getCuotasByIdPrestamo(IdPrestamo);
+            let fechaActual =  new Date();
+            let fechaFormat = this.formatService.formatDate(fechaActual)
+            this.baseDatosService.getAllCuotas(fechaFormat)
+            this.baseDatosService.getAllCuotasPosteriores(fechaFormat);
         })
     }
 
@@ -150,7 +135,6 @@ export class CuotaService {
         var resultado = parseFloat(valorString).toFixed(2);
         // lo convertimos a number otra vez
         var resultadoFormat = +resultado
-        console.log("resutlado formateado" + resultadoFormat)
         return resultadoFormat;
     }
 

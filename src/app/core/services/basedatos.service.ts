@@ -7,6 +7,8 @@ import { SQLitePorter } from '@ionic-native/sqlite-porter/ngx';
 import { Cliente } from '../interfaces/cliente';
 import { take } from 'rxjs/operators';
 import { CuotaService } from './cuota.service';
+import * as moment from 'moment';
+import { FormatService } from './formar.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,19 +19,22 @@ export class BasedatosService {
   public database: SQLiteObject;
   public dbReady = new BehaviorSubject<boolean>(false);
   clienteList = new BehaviorSubject([]);
+  allCuotas =  new BehaviorSubject([]);
+  allCuotasPosteriores  =  new BehaviorSubject([]);
 
   constructor(
     private platform:Platform, 
     private sqlite: SQLite,
     private sqlitePorter : SQLitePorter,
     public http: HttpClient,
+    public formatService : FormatService
    // public cuotaService: CuotaService
     ) { 
       this.platform.ready().then((x)=>{
         console.log(JSON.stringify(x))
         console.log("a crear la base de datos")
         this.sqlite.create({
-          name:'ronnald.db',
+          name:'iiiyb.db',
           location :'default'
         })
         .then((db:SQLiteObject )=>{
@@ -50,7 +55,10 @@ export class BasedatosService {
           console.log("querys insertado.")
           this.dbReady.next(true);
           console.log("ya esta true")
-         // this.cuotaService.getAllCuotas();
+          let fechaActual =  new Date();
+          let fechaFormat = this.formatService.formatDate(fechaActual)
+          this.getAllCuotas(fechaFormat);
+          this.getAllCuotasPosteriores(fechaFormat)
          
         }).catch(e => console.error(JSON.stringify(e)))
       })  
@@ -152,6 +160,102 @@ export class BasedatosService {
         this.loadCliente();
       })
     }
+
+
+    
+    getAllCuotas(fechaActual){
+      //let query = `SELECT * FROM cuota WHERE FechaPago > '${fechaActual}' ORDER BY FechaPago DESC LIMIT 10`
+
+      let query2 = `SELECT 
+      c.Id,
+      c.Nombres,
+      c.Cedula,
+      p.Id,
+      p.IdCliente,
+      p.Monto,
+      p.ValorCuotas,
+      cu.IdPrestamo,
+      cu.FechaPago,
+      cu.EstadoCuota,
+      cu.FechaCreacionCuota
+      FROM cuota cu
+      inner join prestamo p
+      on p.Id = cu.IdPrestamo
+      inner join cliente c
+      on c.Id = p.IdCliente
+      WHERE cu.FechaPago  >=  '${fechaActual}' ORDER BY FechaPago ASC
+      `
+      //let query = `SELECT * FROM cuota`;
+
+      return this.database.executeSql(query2 , []).then((res)=>{
+          let items: any = [];
+          if (res.rows.length > 0) {
+              for (var i = 0; i < res.rows.length; i++) {
+                  items.push({
+                      Nombres: res.rows.item(i).Nombres,
+                      Cedula: res.rows.item(i).Cedula,
+                      Monto: res.rows.item(i).Monto,
+                      ValorCuotas: res.rows.item(i).ValorCuotas,
+                      FechaPago: res.rows.item(i).FechaPago,
+                      EstadoCuota: res.rows.item(i).EstadoCuota
+                  });
+              }
+          }
+          this.allCuotas.next(items)
+      }).catch((err)=>{
+          console.log("errror al obtener todas las cuotas" + JSON.stringify(err))
+      })
+  }
+
+
+  getAllCuotasPosteriores(fechaActual){
+    let query2 = `SELECT 
+    c.Id,
+    c.Nombres,
+    c.Cedula,
+    p.Id,
+    p.IdCliente,
+    p.Monto,
+    p.ValorCuotas,
+    cu.IdPrestamo,
+    cu.FechaPago,
+    cu.EstadoCuota
+    FROM cuota cu
+    inner join prestamo p
+    on p.Id = cu.IdPrestamo
+    inner join cliente c
+    on c.Id = p.IdCliente
+    WHERE cu.FechaPago < '${fechaActual}' ORDER BY FechaPago LIMIT 20
+    `
+
+    return this.database.executeSql(query2 , []).then((res)=>{
+      let items: any = [];
+      if (res.rows.length > 0) {
+          for (var i = 0; i < res.rows.length; i++) {
+              items.push({
+                  Nombres: res.rows.item(i).Nombres,
+                  Cedula: res.rows.item(i).Cedula,
+                  Monto: res.rows.item(i).Monto,
+                  ValorCuotas: res.rows.item(i).ValorCuotas,
+                  FechaPago: res.rows.item(i).FechaPago,
+                  EstadoCuota: res.rows.item(i).EstadoCuota
+              });
+          }
+      }
+      this.allCuotasPosteriores.next(items)
+  }).catch((err)=>{
+      console.log("errror al obtener todas las cuotas posteriores" + JSON.stringify(err))
+  })
+  }
+
+  getCuotasPosteriores(){
+    return this.allCuotasPosteriores.asObservable();
+  }
+
+  
+  getCuotas(){
+    return this.allCuotas.asObservable();
+   }
 
 
 }

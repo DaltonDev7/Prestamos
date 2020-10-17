@@ -1,23 +1,75 @@
+<ion-content color="fondo">
 
-<table class="table dalton">
-    <thead class="thead-dark">
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">First</th>
-        <th scope="col">Last</th>
-        <th scope="col">Handle</th>
-      </tr>
-    </thead>
-    <fa-icon icon="times-circle" class=""></fa-icon>
-    <fa-icon icon="check-circle" class=""></fa-icon>
+  <div class="container m-top">
 
-    <input type="date"
-           placeholder="Datepicker"
-           class="form-control"
-          >
-
-     Hoy es: {{ diaActual }}
-    
-
-  </table>
+    <h4>Hoy es {{diaActual}}</h4>
   
+
+    <div>
+       <h5>Cuotas proximas</h5>
+      <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Fecha pago</th>
+            <th scope="col">Cedula</th>
+            <th scope="col">Nombre Cliente</th>
+            <th scope="col">Monto</th>
+            <th scope="col">Valor Cuota</th>
+            <th scope="col">Estado Cuota</th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let cuota of cuotaList; let i = index;">
+          <tr>
+            <th scope="row">{{i+1}}</th>
+            <td>{{cuota.FechaPago | amDateFormat: 'DD-MM-YYYY' }}</td>
+            <td>{{cuota.Cedula | mask: '000-0000000-0'  }}</td>
+            <td>{{cuota.Nombres  }}</td>
+            <td>{{cuota.Monto  | mask: 'separator':',' }}</td>
+            <td>{{cuota.ValorCuotas | mask: 'separator':','}}</td>
+            <td>{{cuota.EstadoCuota == 2 ? 'NO PAGADO' : 'PAGADO'  }}</td>
+            <!-- <td>{{cuota.CapitalInicial | mask: 'separator':','}}</td> -->
+          </tr>
+        </tbody>
+  
+      </table>
+    </div>
+
+
+    <div>
+      <h5>Cuotas pasadas</h5>
+      <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Fecha pago</th>
+            <th scope="col">Cedula</th>
+            <th scope="col">Nombre Cliente</th>
+            <th scope="col">Monto</th>
+            <th scope="col">Valor Cuota</th>
+            <th scope="col">Estado Cuota</th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let cuota of cuotaListPasadas; let i = index;">
+          <tr>
+            <th scope="row">{{i+1}}</th>
+            <td>{{cuota.FechaPago | amDateFormat: 'DD-MM-YYYY' }}</td>
+            <td>{{cuota.Cedula | mask: '000-0000000-0'  }}</td>
+            <td>{{cuota.Nombres  }}</td>
+            <td>{{cuota.Monto  | mask: 'separator':',' }}</td>
+            <td>{{cuota.ValorCuotas | mask: 'separator':','}}</td>
+            <td>{{cuota.EstadoCuota == 2 ? 'NO PAGADO' : 'PAGADO'  }}</td>
+         
+          </tr>
+        </tbody>
+  
+      </table>
+    </div>
+
+    <div>
+      
+    </div>
+
+  </div>
+
+</ion-content>

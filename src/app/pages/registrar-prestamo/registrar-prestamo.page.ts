@@ -74,13 +74,14 @@ export class RegistrarPrestamoPage implements OnInit {
   }
 
   getData() {
-    this.clienteService.getClienteCedula().subscribe((cliente) => {
+    this.clienteService.getReadOnlyClientePrestamo().subscribe((cliente) => {
       console.log("obteniedo datos " + JSON.stringify(cliente))
       if (cliente[0]) {
         this.cliente = cliente[0];
         this.clienteForm.patchValue(this.cliente);
       } else {
         this.clienteForm.get('Nombres').setValue(null);
+       // this.clienteForm.get('CedulaCliente').setValue(null);
         this.clienteForm.get('Apellidos').setValue(null);
         this.clienteForm.get('Direccion').setValue(null);
         this.clienteForm.get('Sexo').setValue(null);
@@ -102,6 +103,7 @@ export class RegistrarPrestamoPage implements OnInit {
       this.prestamoForm.patchValue({ 'IdCliente': this.cliente.Id });
       this.prestamoService.addPrestamo(this.prestamoForm.getRawValue()).then((data) => {
         this.prestamoForm.reset();
+        this.clienteForm.reset();
         this.toastService.showMessagePrestamoSaved();
       }).catch((err) => {
         console.log("error al guardar prestamo" + JSON.stringify(err))

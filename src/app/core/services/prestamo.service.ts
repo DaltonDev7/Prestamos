@@ -9,6 +9,8 @@ import { ValidatorFormsService } from './validator-forms.service';
 import * as moment from 'moment';
 import { FrecuciaPago } from '../enums/frecuenciaPago.enum';
 import { EstadoCuota } from '../enums/cuotaEstado.enum';
+import { CuotaService } from './cuota.service';
+import { FormatService } from './formar.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +23,9 @@ export class PrestamoService {
 
   constructor(
     public baseDatosService: BasedatosService,
-    public validatorService: ValidatorFormsService
+    public validatorService: ValidatorFormsService,
+    private cuotaService : CuotaService,
+    public formatService : FormatService
   ) { }
 
 
@@ -89,7 +93,7 @@ export class PrestamoService {
   }
 
   getUltimoPrestamo() {
-    return this.lastPrestamo.asObservable();
+    return this.lastPrestamo.asObservable().pipe(take(1));
   }
 
   getPrestamos() {
@@ -139,6 +143,7 @@ export class PrestamoService {
       console.log("respuesta" + JSON.stringify(res))
       this.loadPrestamo();
       this.obtenerUltimoPrestamo();
+    
 
     }).catch((err) => {
       console.log("errror en el prestamo service")
@@ -171,12 +176,14 @@ export class PrestamoService {
           var cantidadDaysOrMonths = 0;
           var mesOrDia = 0;
           var fechaPago;
+          var fechaFormat;
           var capitalInicial = prestamo.Monto;
           var valorCuota = prestamo.ValorCuotas;
           var pagoCapital = prestamo.PagoCapital;
           var pagoInteres = prestamo.PagoInteres;
           var estadoCuota = 2;
           var capitalFinal;
+          
 
           for (let i = 1; i <= prestamo.CantidadCuotas; i++) {
 
@@ -199,32 +206,42 @@ export class PrestamoService {
                 break;
             }
 
+            var fechaActual = new Date()
+            
             if (mesOrDia == 1) {
-              fechaPago = moment().add(cantidadDaysOrMonths, 'days').format('DD/MM/YYYY');
+              //fechaPago = moment().add(cantidadDaysOrMonths, 'days').format('DD/MM/YYYY');
+    
+              fechaPago = this.sumarDiasFecha(fechaActual ,cantidadDaysOrMonths)
+              fechaFormat = this.formatService.formatDate(fechaPago)
             } else {
-              fechaPago = moment().add(cantidadDaysOrMonths, 'months').format('DD/MM/YYYY');
+             // fechaPago = moment().add(cantidadDaysOrMonths, 'months').format('DD/MM/YYYY');
+              // fechaPago = new Date();
+               fechaPago = this.sumarMesesFecha(fechaActual , cantidadDaysOrMonths)
+               fechaFormat = this.formatService.formatDate(fechaPago);
             }
 
             if (i >= 2) {
               capitalInicial = capitalFinal;
+              capitalInicial = this.cuotaService.setDecimales(capitalInicial);
               //capitalInicial = capitalInicial - valorCuota
             }
 
             capitalFinal = capitalInicial - pagoCapital;
+            capitalFinal = this.cuotaService.setDecimales(capitalFinal);
 
-            console.log('-----------------------------');
-            console.log(fechaPago);
-            console.log(capitalInicial);
-            console.log(valorCuota);
-            console.log(pagoCapital);
-            console.log(pagoInteres);
-            console.log(capitalFinal);
-            console.log('-----------------------------');
+            // console.log('-----------------------------');
+            // console.log(fechaPago);
+            // console.log(capitalInicial);
+            // console.log(valorCuota);
+            // console.log(pagoCapital);
+            // console.log(pagoInteres);
+            // console.log(capitalFinal);
+            // console.log('-----------------------------');
 
-            var FechaCreacionCuota = moment().format('DD/MM/YYYY');
+            var FechaCreacionCuota = new Date();
             let cuotaData = [
               prestamo.Id,
-              fechaPago,
+              fechaFormat,
               capitalInicial,
               valorCuota,
               pagoCapital,
@@ -233,6 +250,7 @@ export class PrestamoService {
               estadoCuota,
               FechaCreacionCuota
             ]
+            console.log(JSON.stringify(cuotaData));
 
             let query = `
               INSERT INTO cuota (
@@ -248,7 +266,10 @@ export class PrestamoService {
               ) VALUES (?,?,?,?,?,?,?,?,?)`;
 
             this.baseDatosService.database.executeSql(query, cuotaData).then(() => {
-              console.log('cuotas insertado')
+              let fechaActual =  new Date();
+              let fechaFormat = this.formatService.formatDate(fechaActual)
+              this.baseDatosService.getAllCuotas(fechaFormat)
+              this.baseDatosService.getAllCuotasPosteriores(fechaFormat)
             }).catch((err) => {
               console.log(JSON.stringify("error al insertar cuotas" + err));
             })
@@ -265,17 +286,11 @@ export class PrestamoService {
            CAPITAL FINAL : MONTO - PAGO CAPITAL
            */
 
-           var capitalInicial = prestamo.Monto;
-           var pagoInteres = prestamo.PagoInteres;
+          //  var capitalInicial = prestamo.Monto;
+          //  var pagoInteres = prestamo.PagoInteres;
           // var valorCuota = prestamo.ValorCuotas;
           // var pagoCapital = prestamo.PagoCapital;
           // var estadoCuota = 2;
-
-
-
-
-
-
         }
 
       }
@@ -376,6 +391,11 @@ export class PrestamoService {
   deletePrestamoById(idPrestamo: number) {
     return this.baseDatosService.database.executeSql(`DELETE FROM prestamo WHERE Id = ?`, [idPrestamo]).then(() => {
       this.loadPrestamo();
+      let fechaActual =  new Date();
+      let fechaFormat = this.formatService.formatDate(fechaActual)
+      this.baseDatosService.getAllCuotas(fechaFormat);
+      this.baseDatosService.getAllCuotasPosteriores(fechaFormat)
+
     })
   }
 
@@ -392,24 +412,29 @@ export class PrestamoService {
         let montoInteres = montoPrestamo * interes;
         montoInteres = montoInteres / 100;
         montoInteres = montoInteres * cantidadCuotas
+        montoInteres = this.cuotaService.setDecimales(montoInteres);
         console.log(montoInteres)
         prestamoForm.get('MontoInteres').patchValue(montoInteres);
 
         //CALCULANDO PAGO TOTAL
         let pagoTotal = montoInteres + montoPrestamo
+        pagoTotal = this.cuotaService.setDecimales(pagoTotal);
         prestamoForm.get('TotalPago').patchValue(pagoTotal)
 
         //CACULANDO VALOR CUOTA
         let valorCuota = pagoTotal / cantidadCuotas
+        valorCuota = this.cuotaService.setDecimales(valorCuota);
         prestamoForm.get('ValorCuotas').patchValue(valorCuota)
 
         //CALCULANDO PAGO CAPITAL
         let pagoCapital = montoPrestamo / cantidadCuotas
+        pagoCapital = this.cuotaService.setDecimales(pagoCapital);
         prestamoForm.get('PagoCapital').patchValue(pagoCapital);
 
         //CALCULANDO PAGO INTERES
         let pagoInteres = interes * montoPrestamo
         pagoInteres = pagoInteres / 100;
+        pagoInteres = this.cuotaService.setDecimales(pagoInteres);
         prestamoForm.get('PagoInteres').patchValue(pagoInteres);
 
 
@@ -574,6 +599,18 @@ export class PrestamoService {
         valorCuota, montoInteres, totalPago, pagoCapital, pagoInteres])
   }
 
+
+  sumarDiasFecha(fecha: Date, dias) {
+    fecha.setDate(fecha.getDate() + dias);
+    console.log("dias " + fecha)
+    return fecha;
+  }
+
+  sumarMesesFecha(fecha: Date, meses) {
+    fecha.setMonth(fecha.getMonth() + meses)
+    console.log("meses " + fecha)
+    return fecha;
+  }
 
 
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { FormsBuilderService } from 'src/app/core/services/forms-builder.service';
 
@@ -19,7 +19,7 @@ import { take } from 'rxjs/operators';
   templateUrl: './registrar-cliente.page.html',
   styleUrls: ['./registrar-cliente.page.scss'],
 })
-export class RegistrarClientePage implements OnInit {
+export class RegistrarClientePage implements OnInit, OnDestroy {
 
   //ATRIBUTOS
   clienteForm: FormGroup;
@@ -29,7 +29,6 @@ export class RegistrarClientePage implements OnInit {
   bancoCombox: Combox[];
   estadoCombox: Combox[];
   cliente:Cliente;
-  listCliente;
   permiso1 = false;
   permiso2 = false;
 
@@ -46,23 +45,17 @@ export class RegistrarClientePage implements OnInit {
     public validatorServices : ValidatorFormsService
   ) { }
 
+
   ngOnInit() {
     this.clienteForm = this.formsBuilderService.getClienteBuilder();
     this.sexoCombox = this.comboxServices.sexoCombox;
     this.bancoCombox = this.comboxServices.bancosCombox;
     this.estadoCombox = this.comboxServices.EstadoCombox;
 
-    this.baseDatosService.getDataBaseState().subscribe((data) => {
-      if (data) {
-        this.permiso1 = true
-        this.baseDatosService.getClientes().subscribe((data) => {
-          this.listCliente = data
-        })
-      }
-    })
-
     this.clienteForm.get('Cedula').valueChanges.subscribe((data)=>{
+      console.log(JSON.stringify(data))
       if(data.length == 11){
+        console.log(JSON.stringify(data))
         this.clienteServices.getClienteByCedula(data).then(()=>{
           this.validateCliente();
         })
@@ -103,32 +96,19 @@ export class RegistrarClientePage implements OnInit {
     toast.present();
   }
 
-
-  validateMask() {
-    console.log('ejecutado')
-    let cedula = this.clienteForm.get('Cedula').value;
-    let celular = this.clienteForm.get('Celular').value;
-
-    if (cedula.length == 14) {
-      cedula = cedula.substring(0, cedula.length - 1);
-    }
-    if (celular.length == 15) {
-      celular = celular.substring(0, cedula.length - 1);
-    }
-
-    let data = {
-      Celular: celular,
-      Cedula: cedula
-    }
-    this.clienteForm.patchValue(data);
+  ngOnDestroy(): void {
+   //this.validateCliente().unsubscribe();
   }
 
+  
+
   validateCliente(){
-    this.clienteServices.getClienteCedula().subscribe((cliente)=>{
+   this.clienteServices.getClienteCedula().subscribe((cliente)=>{
       console.log("obteniedo datos " + JSON.stringify(cliente))
       if(cliente[0]){
         this.toasMessageService.cedulaExist();
-        this.clienteForm.get('Cedula').setValue(null)
+        //this.clienteForm.get('Cedula').setValue(null)
+        //this.clienteForm.get('Cedula').updateValueAndValidity();
         //this.validatorServices.disabledAllControls(this.clienteForm , ['Cedula'])
       }else{
        // this.validatorServices.enableAllControls(this.clienteForm );
